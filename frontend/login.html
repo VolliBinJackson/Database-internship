@@ -10,8 +10,8 @@
 <body>
 
     <header>
-        <form id="headerform">
-            Anmelden
+        <form id="headerform", style="margin-bottom: 500px;">
+            Lieferspatz-Login
         </form>
     </header>
 
@@ -24,24 +24,45 @@
             <label for="password">Passwort:</label>
             <input type="password" id="password" name="password" required>
 
+            <input type="submit" value="Einloggen">
             <input type="submit" value="Registrieren">
         </form>
    </div>
 
    <script>
+        // Simple Check (Ist der User bereits in DB?)
         function checkLogin(event) {
             event.preventDefault();
 
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
 
-            // Simple Check (Ersetze user und pass später)
-            if (username == "user" && password == "pass") {
+            if (isUserRegistered(username, password)) {
                 window.location.href = "main.html";
             } else {
                 alert("Falscher Nutzername oder Passwort.");
             }
         }
+
+        // Ist der User nicht in DB?
+        function checkRegister() {
+            var newUsername = document.getElementById("newUsername").value;
+            var newPassword = document.getElementById("newPassword").value;
+            
+            
+            // TODO: Anfrage mit Server...
+            alert("Benutzer " + newUsername + " wurde registriert.");
+        }
+
+        
+        // Ist User registriert? (Server)
+        function isUserRegistered(username, password) {
+            
+            return (username == "user" && password == "pass");
+        }
+
+
+        document.getElementById("loginForm").addEventListener("submit", checkLogin);
    </script>
 
 </body>
