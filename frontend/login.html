@@ -11,7 +11,7 @@
 
     <header>
         <form id="headerform", style="margin-bottom: 500px;">
-            Lieferspatz-Login
+            Lieferspatz
         </form>
     </header>
 
@@ -50,8 +50,8 @@
         
         // Ist der User nicht in DB?
         function checkRegister() {
-            var newUsername = document.getElementById("newUsername").value;
-            var newPassword = document.getElementById("newPassword").value;
+            var newUsername = prompt("Neuer Nutzername:");
+            var newPassword = prompt("Neues Passwort:");
             
             
             // TODO: Anfrage mit Server...
@@ -59,14 +59,11 @@
         }
 
         
-        // Ist User registriert? (Server)
+        // überprüfe mit Datenbank 
         function isUserRegistered(username, password) {
-            
-            return (username == "user" && password == "pass");
+             return (username == "user" && password == "pass");
         }
 
-
-        document.getElementById("loginForm").addEventListener("submit", checkLogin);
    </script>
 
 </body>
