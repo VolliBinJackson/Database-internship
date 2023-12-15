@@ -9,12 +9,13 @@ body {
 }
 
 /* Ändere header*/
-#header {
-     text-align: center;   
-     background-color: darkgreen;
-     color: white;
-     padding: 10px;
-     margin-bottom: 20px;
+#headerform {
+    text-align: center; /* Zentriert den Text im Header */
+    background-color: darkgreen; /* Hintergrundfarbe für den Header */
+    color: white; /* Textfarbe im Header */
+    padding: 10px; /* Innenabstand für den Header */
+    margin-bottom: 600px; /* Unten Abstand zum darunterliegenden Element (hier: #login) */
+    
 }
 
 #login {
