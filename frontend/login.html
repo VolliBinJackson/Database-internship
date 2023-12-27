@@ -42,9 +42,11 @@
             if (isUserRegistered(username, password)) {
                 alert("Einloggen war erfolgreich!");
                 window.location.href = "main.html";
+            } else {
                 alert("Falscher Nutzername oder Passwort.");
             }
         }
+        
 
         
         // Ist der User nicht in DB?
