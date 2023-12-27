@@ -3,7 +3,7 @@
     --secondaryColor: darkOrange;
     --whiteColor: white;
     --blackColor: black;
-    --softBlueColor: #0000FF;
+    --lightBlueColor: lightblue;
     --darkGreyColor: darkGrey;
     --greyColor: grey;
 }
@@ -69,3 +69,18 @@ body {
 }
 
 
+.main {
+    width: 100%;
+    height: max-content;
+    min-height: 100vh;
+    padding: 2%;
+    background-color: var(--lightBlueColor);
+    margin-left: 300px;
+}
+
+
+.main-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
