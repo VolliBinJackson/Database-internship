@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../static/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans&display=swap" rel="stylesheet">
     <title>Lieferspatz-Login</title>
 </head>
 <body>
 
     <header>
-        <form id="headerform">
+        <form id="headerform", style="margin-bottom: 500px;">
             Lieferspatz
         </form>
     </header>
@@ -18,16 +18,18 @@
     <div id="login">
         <h2>Anmelden</h2>
         <form id="loginForm" onsubmit="checkLogin(event)">
-            <label for="username">Nutzername:</label>
+            <label for="username">Vorname:</label>
             <input type="text" id="username" name="username" required>
 
             <label for="password">Passwort:</label>
             <input type="password" id="password" name="password" required>
 
             <input type="submit" value="Einloggen">
-        </form>
-
-        <button onclick="checkRegister()">Registrieren</button>
+        
+        
+    </form>
+    <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Registrieren</button>
+        
    </div>
 
    <script>
@@ -46,25 +48,21 @@
                 alert("Falscher Nutzername oder Passwort.");
             }
         }
-        
 
         
-        // Ist der User nicht in DB?
-        function checkRegister() {
-            var newUsername = prompt("Neuer Nutzername:");
-            var newPassword = prompt("Neues Passwort:");
+        
             
             
-            // TODO: Anfrage mit Server...
-            alert("Benutzer " + newUsername + " wurde registriert.");
-        }
-
         
         // überprüfe mit Datenbank 
         function isUserRegistered(username, password) {
              return (username == "user" && password == "pass");
         }
-    </script>
+
+   </script>
 
 </body>
+<!-- Nötig, um Bilder einzufügen: IonIcons Framework -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </html>
