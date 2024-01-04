@@ -3,4 +3,4 @@
 # Ignore --pycache__
 __pycache__
 
-frontend/database.db
+../frontend/database.db
