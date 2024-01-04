@@ -1,1 +1,6 @@
-Database.py
+# .gitignore
+
+# Ignore --pycache__
+__pycache__
+
+frontend/database.db
