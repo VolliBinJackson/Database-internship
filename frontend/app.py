@@ -1,13 +1,20 @@
-from flask import Flask, render_template;
-from flask import request
-import sqlite3
+from flask import Flask, render_template, request, redirect, url_for
+import sqlite3 as sql
 
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('login.html')
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['vorname']
+        password = request.form['password']
+
+        if isUserRegistered(username, password):
+            return redirect(url_for('main'))
+        else:
+            return render_template('login.html', message='Falscher Benutzername oder Passwort.')
+        
 
 @app.route('/main.html')
 def main():
@@ -28,7 +35,7 @@ def addrec():
             adresse = request.form['adresse']
 
             # Connect to SQLite3 database and execute the INSERT
-            with sqlite3.connect('database.db') as con:
+            with sql.connect('database.db') as con:
                 cur = con.cursor()
                 cur.execute("INSERT INTO customers (Vorname, Nachname, Password, CustomerAddress) VALUES (?,?,?,?)",(vorname, nachname, password, adresse))
 
@@ -42,6 +49,19 @@ def addrec():
             con.close()
             # Send the transaction message to result.html
             return render_template('login.html')
+        
+
+def isUserRegistered(username, password):
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM customers WHERE Vorname=? AND Password=?", (username, password))
+    user = cur.fetchone()
+    con.close()
+
+    if user:
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
