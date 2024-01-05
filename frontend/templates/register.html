@@ -33,40 +33,6 @@
             <input type="submit" value="Registrieren">
             </form>
 
-        
-   </div>
-
-   <script>
-        
-        // Simple Check (Ist der User bereits in DB?)
-        function checkLogin(event) {
-            event.preventDefault();
-
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-
-            if (isUserRegistered(username, password)) {
-                alert("Einloggen war erfolgreich!");
-                window.location.href = "main.html";
-            } else {
-                alert("Falscher Nutzername oder Passwort.");
-            }
-        }
-
-        
-        
-            
-            
-        
-        // überprüfe mit Datenbank 
-        function isUserRegistered(username, password) {
-             return (username == "user" && password == "pass");
-        }
-
-   </script>
-
+    </div>
 </body>
-<!-- Nötig, um Bilder einzufügen: IonIcons Framework -->
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </html>
