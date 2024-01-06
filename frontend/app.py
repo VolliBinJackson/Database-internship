@@ -1,21 +1,45 @@
-from flask import Flask, render_template;
-from flask import request
-import sqlite3
-
+from flask import Flask, render_template, request, redirect, url_for
+import sqlite3 as sql
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
+
+def isUserRegistered(username, password):
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM customers WHERE Vorname=? AND Password=?", (username,password))
+    user = cur.fetchone()
+    con.close()
+
+    if user:
+        return True
+    else:
+        return False
+    
+
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if isUserRegistered(username, password):
+            return redirect(url_for('main'))
+    
     return render_template('login.html')
 
-@app.route('/main.html')
+
+
+@app.route('/main')
 def main():
     return render_template('main.html')
+
 
 @app.route('/register.html')
 def register():
     return render_template('register.html')
+
 
 @app.route("/addrec", methods = ['POST', 'GET'])
 def addrec():
@@ -28,7 +52,7 @@ def addrec():
             adresse = request.form['adresse']
 
             # Connect to SQLite3 database and execute the INSERT
-            with sqlite3.connect('database.db') as con:
+            with sql.connect('database.db') as con:
                 cur = con.cursor()
                 cur.execute("INSERT INTO customers (Vorname, Nachname, Password, CustomerAddress) VALUES (?,?,?,?)",(vorname, nachname, password, adresse))
 
