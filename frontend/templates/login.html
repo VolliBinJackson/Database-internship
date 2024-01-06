@@ -17,7 +17,7 @@
 
     <div id="login">
         <h2>Anmelden</h2>
-        <form id="loginForm" onsubmit="checkLogin(event)">
+        <form id="loginForm" action="{{ url_for('login') }}" method="POST">
             <label for="username">Vorname:</label>
             <input type="text" id="username" name="username" required>
 
@@ -27,8 +27,8 @@
             <input type="submit" value="Einloggen">
         
         
-    </form>
-    <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Registrieren</button>
+        </form>
+        <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Registrieren</button>
         
    </div>
 
@@ -49,10 +49,6 @@
             }
         }
 
-        
-        
-            
-            
         
         // überprüfe mit Datenbank 
         function isUserRegistered(username, password) {
