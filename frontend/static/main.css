@@ -84,3 +84,50 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+
+
+.search-btn {
+    background-color: var(--secondaryColor);
+    color: var(--whiteColor);
+    border: none;
+    border-radius: 20px;
+    height: 20px;
+    width: 60px;
+    cursor: pointer;
+}
+
+
+.search:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+
+.search-btn:hover {
+    background-color: var(--primaryColor);
+}
+
+
+.profile-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.0rem;
+}
+
+
+.user, .cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondaryColor);
+    font-size: 20px;
+    color: var(--whiteColor);
+    text-decoration: none;
+    padding: 0 10px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+.user:hover, .cart:hover {
+    background-color: var(--primaryColor);
+}
