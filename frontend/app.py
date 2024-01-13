@@ -1,21 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3 as sql
+from appHelperFunctions import isUserRegistered
 
 app = Flask(__name__)
-
-
-def isUserRegistered(username, password):
-    con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM customers WHERE Vorname=? AND Password=?", (username,password))
-    user = cur.fetchone()
-    con.close()
-
-    if user:
-        return True
-    else:
-        return False
-    
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,7 +10,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        
         if isUserRegistered(username, password):
             return redirect(url_for('main'))
     
