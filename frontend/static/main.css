@@ -118,9 +118,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--secondaryColor);
+    background-color: var(--whiteColor);
     font-size: 20px;
-    color: var(--whiteColor);
+    color: var(--darkGreyColor);
     text-decoration: none;
     padding: 0 10px;
     height: 40px;
@@ -130,4 +130,40 @@ body {
 
 .user:hover, .cart:hover {
     background-color: var(--primaryColor);
+}
+
+
+.main-content {
+    margin: 3% 0;
+    padding: 2%;
+    background-color: var(--secondaryColor);
+    border-radius: 8px;
+}
+
+
+.main-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.main-title {
+    font-size: 20px;
+}
+
+
+.main-arrow {
+    font-size: 25px;
+}
+
+
+.back, .next {
+    cursor: pointer;
+}
+
+
+.back:hover, .next:hover {
+    color: var(--primaryColor);
 }
