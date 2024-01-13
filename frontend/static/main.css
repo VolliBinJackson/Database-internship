@@ -217,3 +217,84 @@ body {
     background-color: var(--whiteColor);
     box-shadow: rgba(176, 176, 176, 0.2) 0px 2px 8px 0px;
 }
+
+
+.main-menus {
+    min-height: 100%;
+    background-color: var(--whiteColor);
+    padding: 2%;
+    border-radius: 8px;
+}
+
+
+.main-category {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+
+.back-menus, .next-menus {
+    cursor: pointer;
+}
+
+
+.category-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100px;
+    gap: 1.2rem;
+}
+
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-right: 70px;
+    min-width: 80px;
+    height: 100%;
+    background-color: var(--whiteColor);
+    color: var(--blackColor);
+    border-radius: 8px;
+    border: 1px solid var(--lightBlueColor);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.category-card:first-child {
+    margin-left: 15px;
+}
+
+
+.category-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 60%;
+    font-size: 30px;
+    background-color: var(--lightBlueColor);
+    color: var(--primaryColor);
+    border-radius: 8px;
+}
+
+
+.category-card:hover {
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+}
+
+
+.divider {
+    margin: 1rem 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--primaryColor);
+    border: none;
+}
