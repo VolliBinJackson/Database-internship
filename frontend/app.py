@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3 as sql
 from appHelperFunctions import isUserRegistered
 
@@ -17,6 +17,11 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('/'))
+    
 
 @app.route('/main')
 def main():
