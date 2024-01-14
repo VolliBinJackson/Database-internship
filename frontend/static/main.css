@@ -46,7 +46,7 @@ body {
 }
 
 
-.sidebar-elements a, .logout a {
+.sidebar-elements a, .logout a, button a {
     padding: 5% 8%;
     margin: 0.5rem 0;
     display: flex;
@@ -58,12 +58,12 @@ body {
 }
 
 
-.sidebar-elements a ion-icon, .logout ion-icon {
+.sidebar-elements a ion-icon, .logout ion-icon, button ion-icon {
     font-size: 20px;
 }
 
 
-.sidebar-elements a:hover, .logout a:hover {
+.sidebar-elements a:hover, .logout a:hover, button:hover {
     background-color: var(--secondaryColor);
     border-radius: 20px;
 }
