@@ -17,10 +17,10 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/logout')
+@app.route('/logout', methods = ['POST', 'GET'])
 def logout():
-    session.pop('username', None)
-    return redirect(url_for('/'))
+    if request.method == 'POST':
+        return redirect(url_for('login'))
     
 
 @app.route('/main')
