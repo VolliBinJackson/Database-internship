@@ -46,7 +46,7 @@ body {
 }
 
 
-.sidebar-elements a, .logout a{
+.sidebar-elements a, .logout a {
     padding: 5% 8%;
     margin: 0.5rem 0;
     display: flex;
@@ -58,7 +58,7 @@ body {
 }
 
 
-.sidebar-elements a ion-icon, .logout a ion-icon {
+.sidebar-elements a ion-icon, .logout ion-icon {
     font-size: 20px;
 }
 
