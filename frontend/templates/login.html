@@ -16,7 +16,7 @@
     </header>
 
     <div id="login">
-        <h2>Anmelden</h2>
+        <h2>Anmelden (Kunde)</h2>
         <form id="loginForm" action="{{ url_for('login') }}" method="POST">
             <label for="username">Vorname:</label>
             <input type="text" id="username" name="username" required>
@@ -28,9 +28,28 @@
         
         
         </form>
-        <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Registrieren</button>
+        <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Kunde Registrieren</button>
         
    </div>
+
+
+   <div id="login">
+    <h2>Anmelden (Restaurant)</h2>
+    <form id="loginForm" action="{{ url_for('Rlogin') }}" method="POST">
+        <label for="username">Name:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password" required>
+
+        <input type="submit" value="Einloggen">
+    
+    
+    </form>
+    <button onclick="window.location.href = 'restaurant_register.html';" id="myButton" class="float-left submit-button" >Restaurant Registrieren</button>
+    
+   </div>
+
 
    <script>
         
