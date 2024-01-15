@@ -1,0 +1,258 @@
+:root {
+    --primaryColor: darkblue;
+    --secondaryColor: darkOrange;
+    --whiteColor: white;
+    --blackColor: black;
+    --lightBlueColor: lightblue;
+    --darkGreyColor: darkGrey;
+    --greyColor: grey;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: 'Rethink Sans', sans-serif;
+}
+
+
+body {
+    width: 100%;
+    height: auto;
+    display: flex;
+}
+
+
+.sidebar {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 2%;
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+}
+
+
+.sidebar-elements {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.sidebar-elements a, .logout a{
+    padding: 5% 8%;
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--whiteColor);
+}
+
+
+.sidebar-elements a ion-icon, .logout a ion-icon {
+    font-size: 20px;
+}
+
+
+.sidebar-elements a:hover, .logout a:hover {
+    background-color: var(--secondaryColor);
+    border-radius: 20px;
+}
+
+
+.main {
+    width: 100%;
+    height: max-content;
+    min-height: 100vh;
+    padding: 2%;
+    background-color: var(--lightBlueColor);
+    margin-left: 300px;
+}
+
+
+.main-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.search-btn {
+    background-color: var(--secondaryColor);
+    color: var(--whiteColor);
+    border: none;
+    border-radius: 20px;
+    height: 20px;
+    width: 60px;
+    cursor: pointer;
+}
+
+
+.search:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+
+.search-btn:hover {
+    background-color: var(--primaryColor);
+}
+
+
+.profile-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.0rem;
+}
+
+
+.user, .cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--whiteColor);
+    font-size: 20px;
+    color: var(--darkGreyColor);
+    text-decoration: none;
+    padding: 0 10px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+.user:hover, .cart:hover {
+    background-color: var(--primaryColor);
+}
+
+
+.main-content {
+    margin: 3% 0;
+    padding: 2%;
+    background-color: var(--secondaryColor);
+    border-radius: 8px;
+}
+
+
+.main-menus {
+    min-height: 100%;
+    background-color: var(--whiteColor);
+    padding: 2%;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+
+.main-category {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1.5rem;
+
+}
+
+
+.back-menus, .next-menus {
+    cursor: pointer;
+}
+
+
+.category-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100px;
+    gap: 1.2rem;
+}
+
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-right: 180px;
+    min-width: 80px;
+    height: 100%;
+    background-color: var(--whiteColor);
+    color: var(--blackColor);
+    border-radius: 8px;
+    border: 1px solid var(--lightBlueColor);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.category-card:first-child {
+    margin-left: 20px;
+}
+
+
+.category-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 60%;
+    font-size: 30px;
+    background-color: var(--lightBlueColor);
+    color: var(--primaryColor);
+    border-radius: 8px;
+}
+
+
+.category-card:hover {
+    background-color: var(--primaryColor);
+    color: var(--whiteColor);
+}
+
+
+.divider {
+    margin: 1rem 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--primaryColor);
+    border: none;
+}
+.mains h2 {
+    font-size: 24px;
+    color: var(--blackColor);
+    margin-bottom: 20px;
+}
+.restaurant-list {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.restaurant-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.restaurant-list li {
+    margin: 15px 0;
+}
+
+.restaurant-list a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.restaurant-list a:hover {
+    color: #007bff;
+}
+.restaurant-description {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
