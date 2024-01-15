@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/restaurant.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans&display=swap" rel="stylesheet">
+    <script defer src="https://pyscript.net/alpha/pyscript.js">
+    </script>
+    <title>Lieferspatz Online Service</title>
+</head>
+<body>
+    <!-- Sidebar -->
+     <div class="sidebar">
+        <h1 class="logo">Lieferspatz</h1>
+        <div class="sidebar-elements">
+            <a href="#"><ion-icon name="Home"></ion-icon>Home</a>
+            <a href="#"><ion-icon name="receipt-outline"></ion-icon>Lieferstatus</a>
+            <a href="#"><ion-icon name="wallet-outline"></ion-icon>Geldtasche</a>
+            <a href="#"><ion-icon name="storefront-outline"></ion-icon>Über uns</a>
+        </div>
+
+        <div class="logout">
+            <a href="#"><ion-icon name="log-out-outline"></ion-icon>Ausloggen</a>
+        </div>
+     </div>
+
+     <!-- Suche und Icons -->
+     <div class="main">
+        <div class="main-navbar">
+            <!-- Suchleiste-->
+            <div class="search">
+                <input type="text" placeholder="Was suchen Sie?">
+                <button class="search-btn">Suche</button>
+            </div>
+            <!-- Profilsymbol und Einkaufswagensymbol -->
+            <div class="profile-icons">
+                <a class="user" href="#"><ion-icon name="person-outline"></ion-icon></a>
+                <a class="cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
+            </div>
+        </div>
+
+        
+
+        <!-- Hauptmenü / Bestellen -->
+        
+        <div class="mains">
+            <div class="restaurant-list">
+                <h1>Unsere Restaurants</h1>
+                <ul>
+                    {% for i in all_data %}
+                    <li>
+                        <a href="">{{i[0]}}</a> 
+                        <p class="restaurant-description">{{i[2]}}</p>
+                    </li>
+                    {% endfor %}
+                    <!-- Add more restaurants here -->
+                </ul>
+            </div>
+        </div>
+      
+    
+                    
+
+
+
+</body>
+<!-- Nötig, um Bilder einzufügen: IonIcons Framework -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</html>
