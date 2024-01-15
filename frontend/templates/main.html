@@ -14,31 +14,19 @@
         <div class="sidebar-elements">
             <a href="#"><ion-icon name="Home"></ion-icon>Home</a>
             <a href="#"><ion-icon name="receipt-outline"></ion-icon>Lieferstatus</a>
-            <a href="#"><ion-icon name="wallet-outline"></ion-icon>Geldtasche</a>
-            <a href="#"><ion-icon name="storefront-outline"></ion-icon>Über uns</a>
         </div>
 
-        <div class="logout">
-            <a href="#"><ion-icon name="log-out-outline"></ion-icon>Ausloggen</a>
-        </div>
 
         <form action="{{ url_for('logout') }}" method="post">
             <button type="submit"><ion-icon name="log-out-outline"></ion-icon>Ausloggen</button>
         </form>
      </div>
 
-
      <!-- Suche und Icons -->
      <div class="main">
         <div class="main-navbar">
-            <!-- Suchleiste-->
-            <div class="search">
-                <input type="text" placeholder="Was suchen Sie?">
-                <button class="search-btn">Suche</button>
-            </div>
             <!-- Profilsymbol und Einkaufswagensymbol -->
             <div class="profile-icons">
-                <a class="user" href="#"><ion-icon name="person-outline"></ion-icon></a>
                 <a class="cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
             </div>
         </div>
