@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans&display=swap" rel="stylesheet">
+    <title>Lieferspatz-Login</title>
+</head>
+<body>
+
+    <header>
+        <form id="headerform", style="margin-bottom: 500px;">
+            Lieferspatz
+        </form>
+    </header>
+
+    <div id="login">
+        <h2>Als Restaurant registrieren</h2>
+        <form id="loginForm", action="{{ url_for('Raddrec') }}" method="POST">
+            <label for="vorname">Name:</label>
+            <input type="text" id="username" name="vorname" required>
+
+            <label for="password">Passwort:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="adresse">Adresse:</label>
+            <input type="text" id="username" name="adresse" required>
+
+            <label for="description">Beschreibung:</label>
+            <input type="text" id="username" name="description" required>
+
+            <input type="submit" value="Registrieren">
+            </form>
+
+    </div>
+</body>
+</html>
