@@ -15,7 +15,7 @@ def createRestaurantTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS restaurants")
-    cur.execute("CREATE TABLE restaurants (Name VARCHAR(30) NOT NULL, RestaurantAddress STRING NOT NULL, RestaurantDescription STRING NOT NULL, RestaurantPicture BLOB, RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("CREATE TABLE restaurants (Name VARCHAR(30) NOT NULL, Password STRING NOT NULL, RestaurantAddress STRING NOT NULL, RestaurantDescription STRING NOT NULL, RestaurantPicture BLOB, RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)")
     con.commit()
     con.close()
 
