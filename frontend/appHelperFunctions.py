@@ -12,15 +12,15 @@ def isUserRegistered(username, password):
     else:
         return False
     
-
 def isRestaurantRegistered(name, password):
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute("SELECT * FROM restaurants WHERE name=? AND Password=?", (name, password))
-    user = cur.fetchone()
+    cur.execute("SELECT * FROM restaurants WHERE name=? AND Password=?", (name,password))
+    restaurant = cur.fetchone()
     con.close()
-
-    if user:
-        return True
+    
+    if restaurant:
+        restaurant_ID = restaurant[5]
+        return restaurant_ID
     else:
-        return False
+        return None

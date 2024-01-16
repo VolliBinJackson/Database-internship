@@ -1,12 +1,15 @@
 import sqlite3 as sql
-con = sql.connect("database.db")
 
+with open(r"C:\Users\cihan\Desktop\Database-internship\frontend\static\images.jpeg", "rb") as f:
+    data = f.read()
+
+con = sql.connect("database.db")
 #Create tables
 def createCustomerTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS customers")
-    cur.execute("CREATE TABLE customers (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerAddress STRING NOT NULL, CustomerID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("CREATE TABLE customers (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerStrasse_HausNr STRING NOT NULL, CustomerPLZ INTEGER NOT NULL, CustomerID INTEGER PRIMARY KEY AUTOINCREMENT)")
     con.commit()
     con.close()
 
@@ -24,7 +27,7 @@ def createOrderTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS orders")
-    cur.execute("CREATE TABLE orders (DeliveryAddress STRING NOT NULL, DeliveryState STRING NOT NULL, OrderID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("CREATE TABLE orders (DeliveryAddress STRING NOT NULL, DeliveryState STRING NOT NULL, OrderID INTEGER PRIMARY KEY)")
     con.commit()
     con.close()
 
@@ -34,7 +37,7 @@ def createItemTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS items")
-    cur.execute("CREATE TABLE items (ItemName STRING NOT NULL, Price FLOAT, Picture BLOB, ItemDescription STRING NOT NULL, ItemID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("CREATE TABLE items (ItemName STRING NOT NULL, Price FLOAT, Picture BLOB, ItemDescription STRING NOT NULL, RestaurantID INTEGER, FOREIGN KEY (RestaurantID) REFERENCES restaurants (RestaurantID))")
     con.commit()
     con.close()
 

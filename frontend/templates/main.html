@@ -14,19 +14,27 @@
         <div class="sidebar-elements">
             <a href="#"><ion-icon name="Home"></ion-icon>Home</a>
             <a href="#"><ion-icon name="receipt-outline"></ion-icon>Lieferstatus</a>
+            <a href="#"><ion-icon name="wallet-outline"></ion-icon>Geldtasche</a>
+            <a href="#"><ion-icon name="storefront-outline"></ion-icon>Über uns</a>
         </div>
 
-
-        <form action="{{ url_for('logout') }}" method="post">
-            <button type="submit"><ion-icon name="log-out-outline"></ion-icon>Ausloggen</button>
-        </form>
+        <div class="logout">
+            <a href="#"><ion-icon name="log-out-outline"></ion-icon>Ausloggen</a>
+        </div>
      </div>
+
 
      <!-- Suche und Icons -->
      <div class="main">
         <div class="main-navbar">
+            <!-- Suchleiste-->
+            <div class="search">
+                <input type="text" placeholder="Was suchen Sie?">
+                <button class="search-btn">Suche</button>
+            </div>
             <!-- Profilsymbol und Einkaufswagensymbol -->
             <div class="profile-icons">
+                <a class="user" href="#"><ion-icon name="person-outline"></ion-icon></a>
                 <a class="cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
             </div>
         </div>
@@ -78,72 +86,8 @@
                 </div>
             </div>
             <hr class="divider">
-            
-            <div class="main-detail">
-                <h2 class="main-title">Wähle deine Bestellung</h2>
-                <div class="detail-wrapper">
-                    <div class="detail-card">
-                        <img class="detail-img" src="C:\Users\VolkanX\Desktop\DBP\frontend\images\burgers\hamburger.jpg">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Hamburger</h4>
-                                <p class="detail-sub">Der Hamburger ist unsere Empfehlung für neue Kunden</p>
-                                <p class="price">4,99€</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <img class="detail-img" src="C:\Users\VolkanX\Desktop\DBP\frontend\images\burgers\cheeseburger.jpg">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Cheeseburger</h4>
-                                <p class="detail-sub">Tauche ein in einen kulinarischen Traum mit unserem Cheeseburger – eine unwiderstehliche Fusion aus saftigem Rindfleisch, geschmolzenem Käse und sorgfältig ausgewählten Zutaten.</p>
-                                <p class="price">7,99€</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <img class="detail-img" src="C:\Users\VolkanX\Desktop\DBP\frontend\images\burgers\surfandturfburger.jpg">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Surf and Turf Lobster Burger</h4>
-                                <p class="detail-sub">Ein Surf & Turf-Burger der Extraklasse, der die Zartheit von Hummerfleisch mit dem saftigen Geschmack von hochwertigem Rinderfilet kombiniert. Der Burger wird mit Avocado, einer feinen Zitronenaioli und frischem Rucola verfeinert. Eine Empfehlung unsererseits für besonders Hungrige</p>
-                                <p class="price">9,99€</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <img class="detail-img" src="C:\Users\VolkanX\Desktop\DBP\frontend\images\burgers\beefburger.jpg">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Beef Burger</h4>
-                                <p class="detail-sub">Unser Beef Burger mit Triple Gurken ist ein zeitloser Favorit für alle Liebhaber von herzhaftem Fleischgenuss, Die Grundlage bildet unser hochwertiges Rindfleisch, sorgfältig ausgewählt für seinen kräftigen Geschmack und seine saftige Konsistenz.</p>
-                                <p class="price">12,99€</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <img class="detail-img" src="C:\Users\VolkanX\Desktop\DBP\frontend\images\burgers\drinks.png">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Drinks</h4>
-                                <p class="detail-sub">Selbstverständlich dürfen die Getränke nicht fehlen. Wir bieten wir für unsere Kunden auch eine Auswahl nach Wahl, die sorgfältig zusammengestellt wurden, um deinen Durst zu stillen</p>
-                                <p class="price">2,99€</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                    
+        </div>
+     </div>
                     
 
 
