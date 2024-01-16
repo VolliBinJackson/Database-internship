@@ -1,390 +1,150 @@
-from flask import Flask, render_template, redirect, request, url_for, session, abort
-import os
-from werkzeug.utils import secure_filename
-from database import Database
-db = Database()
-
-
-def checkAppropriateFile(file):
-    ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
-    for f in ALLOWED_EXTENSIONS:
-        if file.endswith(f):
-            return True
-    return False
-
-
-# db.CreateTableAdmin()
-# db.insertIntoAdmin(1, 'xyz@gmail.com', 'cat1234')
-# db.CreateTablePayment()
-# db.CreateTableCustomer()
-# db.CreateTableFood()
-# db.CreateTableORDERED()
-# db.CreateTableReviews()
-
+from flask import Flask, render_template, request, redirect, url_for, session
+import sqlite3 as sql
+from PIL import Image, ImageTk
+from io import BytesIO
+from appHelperFunctions import isUserRegistered, isRestaurantRegistered
 
 app = Flask(__name__)
-app.secret_key = '7457hhhyuft26442'
-
-app.config['UPLOAD_FOLDER'] = '/home/syedarsalan/KDE/DBProject/static/images'
+app.secret_key = 'Ihr_geheimer_Schlüssel_hier'
 
 
-@app.route('/signup', methods=['POST', 'GET'])
-def signup():
-    if "Useremail" and "Userpassword" not in session:
-        if request.method == 'POST':
-            first_name = request.form['first_name']
-            last_name = request.form['last_name']
-            username = request.form['username']
-            Useremail = request.form['Useremail']
-            Userpassword = request.form['Userpassword']
-            phone = request.form['phone']
-            address = request.form['address']
-
-            session['first_name'] = first_name
-            session['last_name'] = last_name
-            session['username'] = username
-            session['Useremail'] = Useremail
-            session['Userpassword'] = Userpassword
-            session['phone'] = phone
-            session['address'] = address
-
-            check = db.checkIfCustomerAlreadyExistForSignUp(Useremail, Userpassword)
-            if not check:
-                db.insertIntoCustomer(
-                    first_name, last_name, username, Useremail, Userpassword, phone, address)
-                return redirect(url_for('home'))
-            else:
-                session.pop('Useremail', None)
-                session.pop('Userpassword', None)
-                return render_template('signup.html', flag=True)
-        else:
-            return render_template('signup.html')
-    return redirect(url_for('home'))
-
-
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
-    if "Useremail" and "Userpassword" not in session:
-        if request.method == 'POST':
-            Useremail = request.form['Useremail']
-            Userpassword = request.form['Userpassword']
-            session["Useremail"] = Useremail
-            session["Userpassword"] = Userpassword
-            # we can not pass values withouot confirming that user is in the session so
-            # return render_template("admin.html", email=email, password=password)
-            check = db.checkIfCustomerAlreadyExistForLogin(Useremail, Userpassword)
-            if (check == True):
-                return redirect(url_for('home'))
-            else:
-                session.pop("Useremail", None)
-                session.pop("Userpassword", None)
-                return render_template("login.html", flag=True)
-        else:
-            return render_template("login.html")
-    else:
-        return redirect(url_for('home'))
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        if isUserRegistered(username, password):
+            session['username'] = username
+            return redirect(url_for('restaurant'))
+    
+    return render_template('login.html')
+
+@app.route('/Rlogin', methods=['GET', 'POST'])
+def Rlogin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        restaurant_id = isRestaurantRegistered(username, password)
+        if restaurant_id:
+            session['restaurant_id'] = restaurant_id
+            return render_template('Rmain.html')
+    
+    return render_template('login.html')
 
 
-@app.route('/')
-def frontPage():
-    return render_template('frontPage.html')
+
+@app.route('/main')
+def main():
+    return render_template('main.html')
+
+@app.route('/restaurant')
+def restaurant():
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        data = cur.execute("select * from restaurants")
+        
+    return render_template('restaurant.html', all_data=data )
+
+@app.route('/restaurant_register.html')
+def restaurant_register():
+    return render_template('restaurant_register.html')
 
 
-@app.route('/home')
-def home():
-    if "Useremail" and "Userpassword" in session:
-        return render_template('home.html')
-    return redirect(url_for('login'))
+@app.route('/register.html')
+def register():
+    return render_template('register.html')
 
 
-@app.route('/menu')
-def menu():
-    if "Useremail" and "Userpassword" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
+@app.route("/addrec", methods = ['POST', 'GET'])
+def addrec():
+    # Data will be available from POST submitted by the form
+    if request.method == 'POST':
+        try:
+            vorname = request.form['vorname']
+            nachname = request.form['nachname']
+            password = request.form['password']     
+            strasse = request.form['adresse']
+            PLZ = request.form['plz']
 
-        foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-        foodnosAndRates = foodnosAndRates.fetchall()
+            # Connect to SQLite3 database and execute the INSERT
+            with sql.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO customers (Vorname, Nachname, Password, CustomerStrasse_HausNr, CustomerPLZ) VALUES (?,?,?,?,?)",(vorname, nachname, password, strasse, PLZ ))
 
-        return render_template("menu.html", foods=foods, foodnosAndRates=foodnosAndRates)
-    return redirect(url_for('login'))
+                con.commit()
+                msg = "Record successfully added to database"
+        except:
+            con.rollback()
+            msg = "Error in the INSERT"
 
-
-@app.route('/account')
-def account():
-    if "Useremail" and "Userpassword" in session:
-        useremail = session["Useremail"]
-        userpassword = session["Userpassword"]
-        customer = db.returnCustomerAccordingToSession(useremail, userpassword)
-        customer = customer.fetchone()
-        return render_template('useraccount.html', customer=customer)
-    return redirect(url_for('login'))
-
-
-@app.route('/menu/<filter>')
-def filter(filter):
-    if "Useremail" and "Userpassword" in session:
-        if filter == 'filterByPrice':
-            foods = db.FoodsFilterBy("food_price")
-            foods = foods.fetchall()
-            foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-            foodnosAndRates = foodnosAndRates.fetchall()        
-            return render_template('menu.html', foods=foods, foodnosAndRates=foodnosAndRates)
-
-        elif filter == 'filterByRating':
-            foods = db.FoodsFilterByOrderRatings()
-            foods = foods.fetchall()
-            foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-            foodnosAndRates = foodnosAndRates.fetchall()
-            return render_template('menu.html', foods=foods, foodnosAndRates=foodnosAndRates)
-        return redirect(url_for('menu'))
-    return redirect(url_for('login'))
-
-@app.route('/update_orderMarked/<int:or_id>')
-def markAsDone(or_id):
-    if "email" and "password" in session:
-        db.updateOrderStatusToDelivered(or_id)
-        return redirect(url_for('allOrders'))
-    return redirect(url_for('adminLogin'))
-
-@app.route('/remove_order/<int:or_id>')
-def removeOrder(or_id):
-    if "email" and "password" in session:
-        db.deleteOrderWithOrderId(or_id)
-        return redirect(url_for('allOrders'))
-    return redirect(url_for('adminLogin'))
-
-@app.route('/menu/customer_orders')
-def orderDetails(flag=None):
-    if "Useremail" and "Userpassword" in session:
-        useremail = session["Useremail"]
-        userpassword = session["Userpassword"]
-        customer = db.returnCustomerAccordingToSession(useremail, userpassword)
-        customer = customer.fetchone()
-        customerId = customer[0]
-        orderDetails = db.returnOrderDetailsOfCustomerWithJoins(customerId)
-        orderDetails = orderDetails.fetchall()
-        getFlag = flag
-        return render_template('orderDetails.html', orderDetails=orderDetails, getFlag=getFlag)
-    return redirect(url_for('login'))
-
-@app.route('/allcustomer_orders')
-def allOrders():
-    if "email" and "password" in session:
-        orderDetails = db.returnAllOrderDetailsOfCustomerWithJoins()
-        orderDetails = orderDetails.fetchall()
-        return render_template('AllorderDetails.html', orderDetails=orderDetails)
-    return redirect(url_for('adminLogin'))
-
-@app.route('/menu/<int:food_id>', methods=['POST', 'GET'])
-def product(food_id):
-    if "Useremail" and "Userpassword" in session:
-        if request.method == 'POST':
-            quantity = request.form['quantity']
-            pay_number = request.form['pay_number']
-            pay_amount = request.form['pay_amount']
-            useremail = session["Useremail"]
-            userpassword = session["Userpassword"]
-            customer = db.returnCustomerAccordingToSession(useremail, userpassword)
-            customer = customer.fetchone()
-            customerId = customer[0]
-
-            already, pay_id = db.insertIntoPaymentThenOrders(pay_number,customerId, food_id, quantity, pay_amount)
-
-            if already == None:
-                return redirect(url_for('orderDetails', flag=False))
-            elif already[0] == 'already' and pay_id == None:
-                return render_template('already.html')
-            # we can cancel order here so we have to delete those things
-            #db.updateCustomerWithPayId(customerId, payId)
-        else:
-            if db.foodIdExists(food_id):
-                food = db.returnFoodById(food_id)
-                food = food.fetchone()
-                reviewsAndCount = db.returnReviewsOfFood_noWithJoins(food_id)
-                reviewsAndCount = reviewsAndCount.fetchone()
-
-                allRevs = db.returnAllReviewsOfFood_noWithJoins(food_id).fetchall()
-                return render_template("productdetails.html", food=food, reviewsAndCount=reviewsAndCount, allRevs=allRevs)
-            else:
-                abort(404)
-    return redirect(url_for('login'))
-
-@app.route('/admin/login', methods=['POST', 'GET'])
-def adminLogin():
-    if "email" and "password" not in session:
-        if request.method == 'POST':
-            email = request.form['email']
+        finally:
+            con.close()
+            # Send the transaction message to result.html
+            return render_template('login.html')
+        
+@app.route("/Raddrec", methods = ['POST', 'GET'])
+def Raddrec():
+    # Data will be available from POST submitted by the form
+    if request.method == 'POST':
+        try:
+            name = request.form['vorname']
             password = request.form['password']
-            session["email"] = email
-            session["password"] = password
-            # we can not pass values withouot confirming that user is in the session so
-            # return render_template("admin.html", email=email, password=password)
-            check = db.checkInAdmin(email, password)
-            if (check == True):
-                return redirect(url_for('admin'))
-            else:
-                session.pop("email", None)
-                session.pop("password", None)
-                return render_template("adminLogin.html", flag=True)
-        else:
-            return render_template("adminLogin.html")
+            adresse = request.form['adresse']
+            beschreibung = request.form['description']
+
+            # Connect to SQLite3 database and execute the INSERT
+            with sql.connect('database.db') as cons:
+                cur = cons.cursor()
+                cur.execute("INSERT INTO restaurants (Name, Password, RestaurantAddress, RestaurantDescription) VALUES (?,?,?,?)",(name, password, adresse, beschreibung))
+
+                cons.commit()
+                msg = "Record successfully added to database"
+        except:
+            cons.rollback()
+            msg = "Error in the INSERT"
+
+        finally:
+            cons.close()
+            # Send the transaction message to result.html
+            return render_template('login.html', message = msg)
+        
+@app.route("/add_item", methods=['POST'])
+def add_item():
+    if 'restaurant_id' in session:
+        try:
+            item_name = request.form['item_name']
+            price = request.form['price']
+            description = request.form['description']
+            restaurant_id = session['restaurant_id']
+
+            with sql.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO items (ItemName, Price, ItemDescription, RestaurantID) VALUES (?, ?, ?, ?)", 
+                            (item_name, price, description, restaurant_id))
+
+                con.commit()
+                msg = "Item successfully added"
+        except Exception as e:
+            con.rollback()
+            msg = f"Error in insert operation: {e}"
+        finally:
+            con.close()
+            return render_template('Rmain.html', message=msg)
     else:
-        return redirect(url_for('admin'))
+        return redirect(url_for('Rlogin'))
+    
+@app.route('/restaurant/<int:restaurant_id>')
+def restaurant_items(restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        items = cur.execute("SELECT * FROM items WHERE RestaurantID = ?", (restaurant_id,)).fetchall()
+        return render_template('restaurant_items.html', items=items)
 
-
-@app.route('/admin/home')
-def admin():
-    if "email" and "password" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
-        foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-        foodnosAndRates = foodnosAndRates.fetchall()
-        return render_template('admin.html', foods=foods, foodnosAndRates=foodnosAndRates)
-    return redirect(url_for('adminLogin'))
-
-
-@app.route('/addfood', methods=['POST', 'GET'])
-def addFood():
-    if "email" and "password" in session:
-        if request.method == 'POST':
-            foodTitle = request.form['foodTitle']
-            foodPrice = request.form['foodPrice']
-            foodDesc = request.form['food_desc']
-            imageFile = request.files['imageFile']
-
-            if imageFile.filename == '':
-                return redirect(request.url)
-            if imageFile and checkAppropriateFile(imageFile.filename):
-                Securefilename = secure_filename(imageFile.filename)
-                imageFile.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], Securefilename))
-                db.InsertIntoFood(Securefilename,
-                                  foodPrice, foodTitle, foodDesc, 1)
-            return redirect(url_for('admin'))
-        else:
-            return render_template('addFood.html')
-    return redirect(url_for("adminLogin"))
-
-
-@app.route('/delete/<int:id>')
-def delFood(id):
-    if "email" and "password" in session:
-        if db.foodIdExists(id):
-            db.deleteFood(id)
-            return redirect(url_for('admin'))
-        else:
-            abort(404)
-    return redirect(url_for("adminLogin"))
-
-@app.route('/edit/<int:id>', methods=['POST', 'GET'])
-def editFood(id):
-    if "email" and "password" in session:
-        if db.foodIdExists(id):
-            if request.method == 'POST':
-                foodTitle = request.form['foodTitle']
-                foodPrice = request.form['foodPrice']
-                foodDesc = request.form['food_desc']
-                imageFile = request.files['imageFile']
-                if imageFile.filename == '':
-                    return redirect(request.url)
-                if imageFile and checkAppropriateFile(imageFile.filename):
-                    Securefilename = secure_filename(imageFile.filename)
-                    imageFile.save(os.path.join(
-                        app.config['UPLOAD_FOLDER'], Securefilename))
-                db.updateFood(id, foodTitle, foodPrice, foodDesc, Securefilename)
-                return redirect(url_for('admin'))
-
-            food = db.returnFoodById(id)
-            food = food.fetchone()
-            return render_template('updateFood.html', food=food)
-        else:
-            abort(404)
-    return redirect(url_for("adminLogin"))
-
-@app.route('/deleteall')
-def deleteAll():
-    if "email" and "password" in session:
-        db.deleteAllFoods()
-        return redirect(url_for('admin'))
-    return redirect(url_for("adminLogin"))
-
-@app.route('/allCustomers')
-def allCustomers():
-    if "email" and "password" in session:
-        customers = db.returnCustomers()
-        customers = customers.fetchall()
-        return render_template('userdetails.html', customers=customers)
-    return redirect(url_for("adminLogin"))
-
-
-@app.route('/delCustomer/<int:id>')
-def delCustomer(id):
-    if "email" and "password" in session:
-        if db.customerIdExists(id):
-            db.deleteCustomer(id)
-            return redirect(url_for('allCustomers'))
-        else:
-            abort(404)
-    return redirect(url_for("adminLogin"))
-
-@app.route('/review/<int:order_id>', methods=['POST', 'GET'])
-def Review(order_id):
-    if "Useremail" and "Userpassword" in session:
-        if db.OrderIdExists(order_id):
-            if request.method == 'POST':
-                review_rate = request.form['review_rate']
-                review_desc = request.form['review_desc']
-
-                uflag = db.InsertIntoReviews(review_rate, review_desc, order_id)
-                if(uflag==True):
-                    return redirect(url_for('orderDetails'))
-                else:
-                    return render_template('reviewForm.html', order_id = order_id, flag= True)
-            else:
-                return render_template('reviewForm.html', order_id = order_id)
-        else:
-            abort(404)
-    return redirect(url_for("login"))
-
-@app.route('/menufor_review')
-def reviewMenu():
-    if "email" and "password" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
-        return render_template('menuForReview.html', foods=foods)
-    return redirect(url_for("adminLogin"))
-
-@app.route('/allreviews/<int:food_no>')
-def allReviews(food_no):
-    if "email" and "password" in session:
-        allreviews = db.returnAllReviewsOfFood_noWithJoins(food_no)
-        allreviews = allreviews.fetchall()
-        reviewsAndCount = db.returnReviewsOfFood_noWithJoins(food_no)
-        reviewsAndCount = reviewsAndCount.fetchone()
-        return render_template('allReviews.html', allreviews=allreviews, reviewsAndCount=reviewsAndCount)
-    return redirect(url_for("adminLogin"))
-
-@app.route('/logout')
-def userLogout():
-    if "Useremail" and "Userpassword" in session:
-        session.pop('Useremail', None)
-        session.pop('Userpassword', None)
-        return redirect(url_for('login'))
-    return redirect(url_for("login"))
-
-@app.route('/admin/logout')
-def adminLogout():
-    if "email" and "password" in session:
-        session.pop('email', None)
-        session.pop('password', None)
-        return redirect(url_for('adminLogin'))
-    return redirect(url_for("adminLogin"))
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+        
+        
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(host="0.0.0.0", port=5000)
