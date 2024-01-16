@@ -1,9 +1,7 @@
 import sqlite3 as sql
-
-with open(r"C:\Users\cihan\Desktop\Database-internship\frontend\static\images.jpeg", "rb") as f:
-    data = f.read()
-
 con = sql.connect("database.db")
+
+
 #Create tables
 def createCustomerTable():
     con = sql.connect("database.db")
