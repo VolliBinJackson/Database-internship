@@ -143,7 +143,10 @@ def restaurant_items(restaurant_id):
         return render_template('restaurant_items.html', items=items)
 
         
-        
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
 
 
 if __name__ == "__main__":
