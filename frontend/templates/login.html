@@ -48,33 +48,7 @@
     </form>
     <button onclick="window.location.href = 'restaurant_register.html';" id="myButton" class="float-left submit-button" >Restaurant Registrieren</button>
     
-    
-</div>
-
-   <script>
-        
-        // Simple Check (Ist der User bereits in DB?)
-        function checkLogin(event) {
-            event.preventDefault();
-
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-
-            if (isUserRegistered(username, password)) {
-                alert("Einloggen war erfolgreich!");
-                window.location.href = "main.html";
-            } else {
-                alert("Falscher Nutzername oder Passwort.");
-            }
-        }
-
-        
-        // überprüfe mit Datenbank 
-        function isUserRegistered(username, password) {
-             return (username == "user" && password == "pass");
-        }
-
-   </script>
+   </div>
 
 </body>
 <!-- Nötig, um Bilder einzufügen: IonIcons Framework -->
