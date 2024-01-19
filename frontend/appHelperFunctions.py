@@ -33,3 +33,11 @@ def get_items_for_restaurant(restaurant_id):
         cur.execute("SELECT * FROM items WHERE RestaurantID=?", (restaurant_id,))
         items = cur.fetchall()
     return items
+
+
+def is_item_in_restaurant(item_name, restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        cur.execute("SELECT COUNT(*) FROM items WHERE ItemName=? AND RestaurantID=?", (item_name, restaurant_id))
+        count = cur.fetchone()[0]
+    return count > 0
