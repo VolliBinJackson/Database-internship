@@ -24,3 +24,12 @@ def isRestaurantRegistered(name, password):
         return restaurant_ID
     else:
         return None
+    
+
+
+def get_items_for_restaurant(restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM items WHERE RestaurantID=?", (restaurant_id,))
+        items = cur.fetchall()
+    return items
