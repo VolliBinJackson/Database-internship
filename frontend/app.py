@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3 as sql
 from PIL import Image, ImageTk
 from io import BytesIO
-from appHelperFunctions import isUserRegistered, isRestaurantRegistered, get_items_for_restaurant
+from appHelperFunctions import *
 
 app = Flask(__name__)
 app.secret_key = 'Ihr_geheimer_Schlüssel_hier'
@@ -125,7 +125,7 @@ def add_item():
                             (item_name, price, description, restaurant_id))
 
                 con.commit()
-                msg = "Item successfully added"
+                msg = "Gericht erfolgreich hinzugefügt."
         except Exception as e:
             con.rollback()
             msg = f"Error in insert operation: {e}"
@@ -139,20 +139,26 @@ def add_item():
 @app.route('/remove_item', methods=['POST'])
 def remove_item():
     if 'restaurant_id' in session:
+        con = None
+
         try:
             item_to_remove = request.form['item_to_remove']
             restaurant_id = session['restaurant_id']
 
-            with sql.connect('database.db') as con:
+            if is_item_in_restaurant(item_to_remove, restaurant_id):
+                con = sql.connect('database.db')
                 cur = con.cursor()
                 cur.execute("DELETE FROM items WHERE ItemName=? AND RestaurantID=?", (item_to_remove, restaurant_id))
                 con.commit()
-                msg = "Item successfully removed"
+                msg = "Gericht erfolgreich entfernt."
+            else:
+                msg = "Dieses Gericht gibt es nicht!"
         except Exception as e:
             con.rollback()
             msg=f"Error in delete operation: {e}"
         finally:
-            con.close()
+            if con:
+                con.close()
             # Hier holst du die aktualisierte Liste der Artikel für das bestimmte Restaurant
             items = get_items_for_restaurant(restaurant_id)
             return render_template('Rmain.html', items=items, message=msg)
