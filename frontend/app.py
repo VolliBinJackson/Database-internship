@@ -197,6 +197,18 @@ def edit_item():
     else:
         return redirect(url_for('Rlogin'))
     
+
+
+@app.route('/restaurant_info', methods=['POST'])
+def save_restaurant_info():
+    if request.method == 'POST':
+        opening_hours = request.form['opening_hours']
+        delivery_radius = request.form['delivery_radius']
+        restaurant_info = {'opening_hours': opening_hours, 'delivery_radius': delivery_radius}
+        return render_template('Rmain.html', restaurant_infos=[restaurant_info])
+
+
+    
 @app.route('/restaurant/<int:restaurant_id>')
 def restaurant_items(restaurant_id):
     with sql.connect('database.db') as con:
