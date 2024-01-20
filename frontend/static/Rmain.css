@@ -66,6 +66,7 @@ header a:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px 0px #000000;
+    margin-bottom: 20px;
 }
 
 .form-container h2 {
@@ -103,6 +104,19 @@ cursor: pointer;
 .form-container input[type="submit"]:hover {
 background-color: #45a196;
 }
+
+
+
+.message-container {
+    background-color: #dff0d8;
+    padding: 15px;
+    border: 1px solid #3c763d;
+    border-radius: 4px;
+    color: #3c763d;
+    margin-top: 20px;
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
