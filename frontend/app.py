@@ -169,19 +169,33 @@ def remove_item():
 
 @app.route('/edit_item', methods=['POST'])
 def edit_item():
-    item_to_edit = request.form.get('item_to_edit')
-    new_price = float(request.form.get('new_price'))
-    new_description = request.form.get('new_description')
+    if 'restaurant_id' in session:
+        con = None
 
-    con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("UPDATE items SET Price=?, ItemDescription=? WHERE ItemName=?", (new_price, new_description, item_to_edit))
-    con.commit()
-    con.close()
+        try:
+            item_to_edit = request.form.get('item_to_edit')
+            new_price = float(request.form.get('new_price'))
+            new_description = request.form.get('new_description')
+            restaurant_id = session['restaurant_id']
 
-    flash('Artikel erfolgreich bearbeitet.', 'success')
-    return render_template('Rmain.html', items=query_items())
-    
+            if is_item_in_restaurant(item_to_edit, restaurant_id):
+                con = sql.connect("database.db")
+                cur = con.cursor()
+                cur.execute("UPDATE items SET Price=?, ItemDescription=? WHERE ItemName=?", (new_price, new_description, item_to_edit))
+                con.commit()
+                msg = "Gericht wurde bearbeitet."
+            else:
+                msg = "Fehler beim Bearbeiten!"
+        except Exception as e:
+            con.rollback()
+            msg = f"Error in edit operation: {e}"
+        finally:
+            if con:
+                con.close()
+            items = get_items_for_restaurant(restaurant_id)
+            return render_template('Rmain.html', items=items, message=msg)
+    else:
+        return redirect(url_for('Rlogin'))
     
 @app.route('/restaurant/<int:restaurant_id>')
 def restaurant_items(restaurant_id):
