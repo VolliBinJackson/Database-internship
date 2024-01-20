@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3 as sql
 from PIL import Image, ImageTk
 from io import BytesIO
@@ -110,6 +110,7 @@ def Raddrec():
             # Send the transaction message to result.html
             return render_template('login.html', message = msg)
         
+
 @app.route("/add_item", methods=['POST'])
 def add_item():
     if 'restaurant_id' in session:
@@ -164,6 +165,22 @@ def remove_item():
             return render_template('Rmain.html', items=items, message=msg)
     else:
         return redirect(url_for('Rlogin'))
+    
+
+@app.route('/edit_item', methods=['POST'])
+def edit_item():
+    item_to_edit = request.form.get('item_to_edit')
+    new_price = float(request.form.get('new_price'))
+    new_description = request.form.get('new_description')
+
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("UPDATE items SET Price=?, ItemDescription=? WHERE ItemName=?", (new_price, new_description, item_to_edit))
+    con.commit()
+    con.close()
+
+    flash('Artikel erfolgreich bearbeitet.', 'success')
+    return render_template('Rmain.html', items=query_items())
     
     
 @app.route('/restaurant/<int:restaurant_id>')
