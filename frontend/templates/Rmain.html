@@ -16,6 +16,26 @@
         </div>
     </header>
 
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Restaurant Informationen</h2>
+            <form method="post" action="/restaurant_info">
+                <!-- Öffnungszeiten -->
+                <label for="opening_hours">Öffnungszeiten (von/bis):</label>
+                <input type="text" id="opening_hours" name="opening_hours" placeholder="08:00 - 22:00" required>
+    
+                <!-- Lieferradius -->
+                <label for="delivery_radius">Lieferradius (PLZ getrennt durch Komma):</label>
+                <input type="text" id="delivery_radius" name="delivery_radius" placeholder="10115, 10439, 10999" required>
+    
+                <input type="submit" value="Speichern">
+            </form>
+        </div>
+    </div>
+    
+
+
     <div class="container">
         <div class="form-container">
             <h2>Artikel hinzufügen</h2>
@@ -65,6 +85,19 @@
             </form>
         </div>
     </div>
+
+
+    {% if restaurant_infos %}
+        <div class="container">
+            <h2>Gespeicherte Informationen</h2>
+            <ul>
+                {% for info in restaurant_infos %}
+                    <li>Öffnungszeiten: {{ info['opening_hours'] }}, <br>
+                        Lieferradius: {{ info['delivery_radius'] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
 
 
