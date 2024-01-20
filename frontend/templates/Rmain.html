@@ -34,6 +34,7 @@
         </div>
     </div>
 
+    
     <div class="container">
         <div class="form-container">
             <h2>Artikel entfernen</h2>
@@ -46,15 +47,34 @@
         </div>
     </div>
 
-    
-    
-    
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Artikel bearbeiten</h2>
+            <form method="post" action="/edit_item">
+                <label for="item_to_edit">Artikelname:</label>
+                <input type="text" id="item_to_edit" name="item_to_edit" required>
+
+                <label for="new_price">Neuer Preis:</label>
+                <input type="number" id="new_price" name="new_price" step="0.01">
+
+                <label for="new_description">Neue Beschreibung:</label>
+                <textarea id="new_description" name="new_description"></textarea>
+
+                <input type="submit" value="Artikel bearbeiten">
+            </form>
+        </div>
+    </div>
+
+
+
     <div class="message-container">
         {% if message %}
             <p>{{ message }}</p>
         {% endif %}
     </div>
-
+    
+    
     <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
