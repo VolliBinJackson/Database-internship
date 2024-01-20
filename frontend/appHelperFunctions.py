@@ -48,11 +48,3 @@ def is_item_in_restaurant(item_name, restaurant_id):
     return count > 0
 
 
-# simple query
-def query_items():
-    conn = sql.connect("database.db")
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM items')
-    items = cursor.fetchall()
-    conn.close()
-    return items
