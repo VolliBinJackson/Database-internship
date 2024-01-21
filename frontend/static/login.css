@@ -45,5 +45,25 @@ body {
     cursor: pointer;
 }
 
+.error-message {
+    display: block; /* oder inline-block, je nach Bedarf */
+    color: red;
+    background-color: #ffdada;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid red;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
 
+.error-message .close-btn {
+    float: right;  /* Positioniert das X rechts */
+    font-weight: bold;  /* Macht das X fett */
+    cursor: pointer;  /* Verändert den Cursor, um Interaktivität zu signalisieren */
+}
+
+#error-checkbox:checked + .error-message {
+    display: none;
+}
 
