@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/Rorder_history.css">
+    <title>Restaurant Bestellungen</title>
+</head>
+<body>
+    <header>
+        <h1>Lieferspatz Restaurant Portal</h1>
+        <nav>
+            <!-- Navigationselemente hier -->
+        </nav>
+    </header>
+    <main>
+        <section class="order-section">
+            <h2>Aktuelle Bestellungen</h2>
+            <div id="orders-container">
+                {% for order in orders %}
+                <div class="order-card">
+                    <h3>Bestellung #{{ order['order_id'] }}</h3>
+                    <p><strong>Status:</strong> {{ order['status'] }}</p>
+                    <p><strong>Datum:</strong> {{ order['date'] }}</p>
+                    <p><strong>Adresse:</strong> {{ order['address'] }}</p>
+                    <p><strong>Anmerkungen:</strong> {{ order['order_note'] }}</p>
+                    <h4>Artikel:</h4> 
+                    <ul>
+                        {% for item in order['items'] %}
+                        <li>{{ item[0] }} - {{ item[1] }}€ (Menge: {{ item[2] }})</li>
+                        {% endfor %}
+                    </ul>
+                    <p><strong>Gesamtpreis:</strong> {{ order['total_price'] }}€</p>
+                    <div class="order-actions">
+                        <a href="/accept_order/{{ order['order_id'] }}" class="btn btn-blue">Annehmen</a>
+                        <a href="/cancel_order/{{ order['order_id'] }}" class="btn btn-red">Stornieren</a>
+                        <a href="/complete_order/{{ order['order_id'] }}" class="btn btn-green">Abschließen</a>
+                    </div>
+                </div>
+                {% else %}
+                <p>Keine Bestellungen gefunden.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Lieferspatz. Alle Rechte vorbehalten.</p>
+    </footer>
+</body>
+</html>
