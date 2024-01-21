@@ -7,6 +7,15 @@
     <title>Restaurant-Menü</title>
 </head>
 <body>
+    <!-- Flash-Nachrichten -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div class="container">
         <h1>Menü</h1>
         <div class="menu">
@@ -14,7 +23,11 @@
             <div class="menu-item">
                 <h3>{{ item[0] }}</h3>
                 <p>Preis: {{ item[1] }} €</p>
-                <p>{{ item[3] }} <span class="plus-sign">+</span></p>
+                <p>{{ item[3] }}</p>
+                <form action="{{ url_for('add_to_cart', item_id=item[5], restaurant_id=item[4]) }}" method="post">
+                    <input type="number" name="quantity" min="1" value="1">
+                    <input type="submit" value="Zum Warenkorb hinzufügen">
+                </form>                
             </div>
             {% endfor %}
         </div>
@@ -25,6 +38,5 @@
             <span class="cart-icon">&#128722;</span>
         </a>
     </div>
-
 </body>
 </html>

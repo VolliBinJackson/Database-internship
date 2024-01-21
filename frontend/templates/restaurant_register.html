@@ -10,29 +10,31 @@
 <body>
 
     <header>
-        <form id="headerform", style="margin-bottom: 500px;">
+        <form id="headerform" style="margin-bottom: 500px;">
             Lieferspatz
         </form>
     </header>
 
     <div id="login">
-        <h2>Als restaurant registrieren</h2>
-        <form id="loginForm", action="{{ url_for('Raddrec') }}" method="POST">
+        <h2>Als Restaurant registrieren</h2>
+        <form id="loginForm" action="{{ url_for('Raddrec') }}" method="POST">
             <label for="vorname">Name:</label>
-            <input type="text" id="username" name="vorname" required>
+            <input type="text" id="vorname" name="vorname" required>
 
             <label for="password">Passwort:</label>
             <input type="password" id="password" name="password" required>
 
             <label for="adresse">Adresse:</label>
-            <input type="text" id="username" name="adresse" required>
+            <input type="text" id="adresse" name="adresse" required>
 
             <label for="description">Beschreibung:</label>
-            <input type="text" id="username" name="description" required>
+            <input type="text" id="description" name="description" required>
+
+            <label for="plz">Lieferradius (PLZ, getrennt durch Komma):</label>
+            <input type="text" id="plz" name="plz" placeholder="10115, 10439, 10999" required>
 
             <input type="submit" value="Registrieren">
-            </form>
-
+        </form>
     </div>
 </body>
 </html>

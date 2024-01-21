@@ -10,11 +10,11 @@
     <div class="container">
         <h1>Verfügbare Restaurants</h1>
         <div class="restaurant-list">
-            {% for restaurant in all_data %}
+            {% for restaurant in restaurants %}
             <div class="restaurant">
                 <h2>{{ restaurant[0] }}</h2>
                 <p>{{ restaurant[3] }}</p>
-                <a href="{{ url_for('restaurant_items', restaurant_id=restaurant[5])}}">Menü anzeigen</a>
+                <a href="{{ url_for('restaurant_items', restaurant_id=restaurant[6])}}">Menü anzeigen</a>
             </div>
             {% endfor %}
         </div>

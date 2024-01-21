@@ -16,6 +16,18 @@
     </header>
 
     <div id="login">
+        
+        <!-- Fehlermeldung -->
+        {% if error %}
+    <input type="checkbox" id="error-checkbox" style="display:none;" />
+
+    <!-- Fehlermeldung mit einem X zum Schließen -->
+    <label for="error-checkbox" class="error-message">
+        {{ error }} 
+        <span class="close-btn">&#10005;</span> <!-- Hier fügen wir das X hinzu -->
+    </label>
+        {% endif %}
+
         <h2>Anmelden (Kunde)</h2>
         <form id="loginForm" action="{{ url_for('login') }}" method="POST">
             <label for="username">Vorname:</label>
