@@ -3,11 +3,11 @@ con = sql.connect("database.db")
 
 
 #Create tables
-def createCustomerTable():
+def createUserTable():
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute("DROP TABLE IF EXISTS customers")
-    cur.execute("CREATE TABLE customers (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerStrasse_HausNr STRING NOT NULL, CustomerPLZ INTEGER NOT NULL, CustomerID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("CREATE TABLE users (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerStrasse_HausNr STRING NOT NULL, CustomerPLZ INTEGER NOT NULL, UserID INTEGER PRIMARY KEY AUTOINCREMENT)")
     con.commit()
     con.close()
 
@@ -16,18 +16,45 @@ def createRestaurantTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS restaurants")
-    cur.execute("CREATE TABLE restaurants (Name VARCHAR(30) NOT NULL, Password STRING NOT NULL, RestaurantAddress STRING NOT NULL, RestaurantDescription STRING NOT NULL, RestaurantPicture BLOB, RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("CREATE TABLE restaurants (Name VARCHAR(30) NOT NULL, Password STRING NOT NULL, RestaurantAddress STRING NOT NULL, RestaurantDescription STRING NOT NULL, RestaurantPicture BLOB, Lieferradius TEXT, RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)")
     con.commit()
     con.close()
 
 
 def createOrderTable():
-    con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("DROP TABLE IF EXISTS orders")
-    cur.execute("CREATE TABLE orders (DeliveryAddress STRING NOT NULL, DeliveryState STRING NOT NULL, OrderID INTEGER PRIMARY KEY)")
-    con.commit()
-    con.close()
+    with sql.connect("database.db") as con:
+        cur = con.cursor()
+        cur.execute("DROP TABLE IF EXISTS orders")
+        cur.execute("""
+            CREATE TABLE orders (
+                OrderID INTEGER PRIMARY KEY,
+                UserID INT,
+                RestaurantID INT,
+                DeliveryAddress STRING NOT NULL,
+                DeliveryState STRING DEFAULT 'in Bearbeitung',
+                OrderNote TEXT,
+                OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (UserID) REFERENCES users(UserID),
+                FOREIGN KEY (RestaurantID) REFERENCES restaurants(RestaurantID)
+            )
+        """)
+        con.commit()
+
+def createOrderItemsTable():
+    with sql.connect("database.db") as con:
+        cur = con.cursor()
+        cur.execute("DROP TABLE IF EXISTS order_items")
+        cur.execute("""
+            CREATE TABLE order_items (
+                OrderItemID INTEGER PRIMARY KEY,
+                OrderID INT,
+                ItemID INT,
+                Quantity INT,
+                FOREIGN KEY (OrderID) REFERENCES orders(OrderID),
+                FOREIGN KEY (ItemID) REFERENCES items(ItemID)
+            )
+        """)
+        con.commit()
 
 
 
@@ -35,12 +62,24 @@ def createItemTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS items")
-    cur.execute("CREATE TABLE items (ItemName STRING NOT NULL, Price FLOAT, Picture BLOB, ItemDescription STRING NOT NULL, RestaurantID INTEGER, FOREIGN KEY (RestaurantID) REFERENCES restaurants (RestaurantID))")
+    cur.execute("CREATE TABLE items (ItemName STRING NOT NULL, Price FLOAT, Picture BLOB, ItemDescription STRING NOT NULL, RestaurantID INTEGER, ItemID INTEGER PRIMARY KEY AUTOINCREMENT, FOREIGN KEY (RestaurantID) REFERENCES restaurants (RestaurantID))")
+    con.commit()
+    con.close()
+
+def createCartTable():
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("DROP TABLE IF EXISTS cart")
+    cur.execute("CREATE TABLE cart (userID int, itemID int, restaurantID INT, quantity int,  note TEXT, FOREIGN KEY (userID) REFERENCES users(userID), FOREIGN KEY (itemID) REFERENCES items(ItemID))")
     con.commit()
     con.close()
 
 
-createCustomerTable()
+
+createUserTable()
 createRestaurantTable()
 createOrderTable()
+createOrderItemsTable()
 createItemTable()
+createCartTable()
+
