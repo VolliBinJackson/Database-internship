@@ -112,3 +112,20 @@ footer {
 .order-actions {
     margin-top: 15px;
 }
+
+
+.logout-button {
+    background-color: #ff0000; /* Rote Hintergrundfarbe */
+    color: #fff; /* Weiße Textfarbe */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+
+.logout-button:hover {
+    background-color: #cc0000; /* Dunkleres Rot bei Hover */
+}
