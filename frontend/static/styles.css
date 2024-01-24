@@ -5,9 +5,50 @@ body {
     background-color: #f4f4f4;
 }
 
+.sidebar {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 2%;
+    background-color: blue;
+    color: white;
+}
+
+.sidebar-elements {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 450px;
+    gap: 1rem;
+}
+
+
+.sidebar-elements a {
+    padding: 5% 8%;
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.sidebar-elements a:hover {
+    background-color: darkorange;
+    border-radius: 20px;
+}
+
+
 .container {
     width: 80%;
     margin: auto;
+    margin-left: 380px;
     overflow: hidden;
 }
 
