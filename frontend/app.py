@@ -51,11 +51,16 @@ def logout():
     return redirect(url_for('login'))
 
 
-
+@app.route('/Rlogout', methods=['POST'])
+def Rlogout():
+    if request.method == 'POST':
+        return redirect(url_for('Rlogin'))
 
 @app.route('/main')
 def main():
     return render_template('main.html')
+
+
 
 @app.route('/restaurant')
 def restaurant():
