@@ -43,8 +43,15 @@
             </div>
         </section>
     </main>
+
     <footer>
         <p>&copy; 2024 Lieferspatz. Alle Rechte vorbehalten.</p>
     </footer>
+
+    <div class="container">
+        <form action="{{ url_for('Rlogout') }}" method="post">
+            <input class="logout-button" type="submit" value="Ausloggen">
+        </form>
+    </div>
 </body>
 </html>
