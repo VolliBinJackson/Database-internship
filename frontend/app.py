@@ -249,23 +249,7 @@ def add_to_cart(item_id, restaurant_id):
         flash('Sie können nicht gleichzeitig bei verschiedenen Restaurants bestellen. Leeren Sie Ihren Warenkorb oder fügen Sie Artikel aus demselben Restaurant hinzu.', 'warning')
         return redirect(url_for('restaurant_items', restaurant_id=restaurant_id))
 
-def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
-    with sql.connect('database.db') as con:
-        cur = con.cursor()
-        cur.execute("SELECT restaurantID FROM cart WHERE userID = ?", (user_id,))
-        existing_restaurant_id = cur.fetchone()
-        if existing_restaurant_id and existing_restaurant_id[0] != restaurant_id:
-            return False
 
-        cur.execute("SELECT quantity FROM cart WHERE userID = ? AND itemID = ? AND restaurantID = ?", (user_id, item_id, restaurant_id))
-        result = cur.fetchone()
-        if result:
-            new_quantity = result[0] + int(quantity)
-            cur.execute("UPDATE cart SET quantity = ? WHERE userID = ? AND itemID = ? AND restaurantID = ?", (new_quantity, user_id, item_id, restaurant_id))
-        else:
-            cur.execute("INSERT INTO cart (userID, itemID, restaurantID, quantity) VALUES (?, ?, ?, ?)", (user_id, item_id, restaurant_id, quantity))
-        con.commit()
-    return True
 
 @app.route('/remove_from_cart', methods=['GET'])
 def remove_from_cart():
