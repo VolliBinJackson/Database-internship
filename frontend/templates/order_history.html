@@ -1,35 +1,35 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Bestellhistorie</title>
-    <link rel="stylesheet" href="../static/order_history.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Bestellhistorie</h1>
-        <div class="orders">
-            {% for order in orders %}
-                <div class="order-card">
-                    <h2>Bestellung #{{ order['order_id'] }}</h2>
-                    <p><strong>Datum:</strong> {{ order['date'] }}</p>
-                    <p><strong>Status:</strong> {{ order['state'] }}</p>
-                    <p><strong>Lieferadresse:</strong> {{ order['address'] }}</p>
-                    <p><strong>Anmerkungen:</strong> {{ order['order_note'] }}</p>
-                    <div class="order-items">
-                        <h3>Artikel</h3>
-                        <ul>
-                            {% for item in order['items'] %}
-                             <li>{{ item['quantity'] }}x {{ item['name'] }} - {{ item['price'] }}€</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <p class="total-price"><strong>Gesamtpreis:</strong> {{ order['total_price'] }}€</p>
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="../static/order_history.css">
+{% endblock %}
+
+{% block title %}Bestellhistorie{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Bestellhistorie</h1>
+    <div class="orders">
+        {% for order in orders %}
+            <div class="order-card">
+                <h2>Bestellung #{{ order['order_id'] }}</h2>
+                <p><strong>Datum:</strong> {{ order['date'] }}</p>
+                <p><strong>Status:</strong> {{ order['state'] }}</p>
+                <p><strong>Lieferadresse:</strong> {{ order['address'] }}</p>
+                <p><strong>Anmerkungen:</strong> {{ order['order_note'] }}</p>
+                <div class="order-items">
+                    <h3>Artikel</h3>
+                    <ul>
+                        {% for item in order['items'] %}
+                        <li>{{ item['quantity'] }}x {{ item['name'] }} - {{ '%.2f' | format(item['price']) }}€</li>
+                        {% endfor %}
+                    </ul>
                 </div>
-            {% else %}
-                <p>Keine Bestellungen gefunden.</p>
-            {% endfor %}
-        </div>
+                <p class="total-price"><strong>Gesamtpreis:</strong> {{ '%.2f' | format(order['total_price']) }}€</p>
+            </div>
+        {% else %}
+            <p>Keine Bestellungen gefunden.</p>
+        {% endfor %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

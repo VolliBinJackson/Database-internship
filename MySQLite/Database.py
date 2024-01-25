@@ -6,7 +6,7 @@ con = sql.connect("database.db")
 def createUserTable():
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("DROP TABLE IF EXISTS customers")
     cur.execute("CREATE TABLE users (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerStrasse_HausNr STRING NOT NULL, CustomerPLZ INTEGER NOT NULL, UserID INTEGER PRIMARY KEY AUTOINCREMENT)")
     con.commit()
     con.close()

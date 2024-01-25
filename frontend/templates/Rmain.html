@@ -1,92 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/Rmain.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans&display=swap" rel="stylesheet">
-    <title>Lieferspatz Online Service</title>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div id="branding">
-                <h1>Lieferspatz Online Service</h1>
-            </div>
-        </div>
-    </header>
+{% extends 'Rbase.html' %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="../static/Rmain.css">
+{% endblock %}
 
-    <div class="container">
-        <div class="form-container">
-            <h2>Gericht hinzufügen</h2>
-            <form method="post" action="/add_item">
-                <label for="item_name">Gerichtname:</label>
-                <input type="text" id="item_name" name="item_name" required>
+{% block title %}Lieferspatz Online Service{% endblock %}
 
-                <label for="price">Preis:</label>
-                <input type="number" id="price" name="price" step="0.01" required>
+{% block content %}
 
-                <label for="description">Beschreibung:</label>
-                <textarea id="description" name="description" required></textarea>
+<div class="container">
+    <div class="form-container">
+        <h2>Gericht hinzufügen</h2>
+        <form method="post" action="/add_item">
+            <label for="item_name">Gerichtname:</label>
+            <input type="text" id="item_name" name="item_name" required>
 
-                <input type="submit" value="Artikel hinzufügen">
-            </form>
-        </div>
-    </div>
+            <label for="price">Preis:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
 
-    
-    <div class="container">
-        <div class="form-container">
-            <h2>Gericht entfernen</h2>
-            <form method="post" action="/remove_item">
-                <label for="item_to_remove">Gerichtname</label>
-                <input type="text" id="item_to_remove" name="item_to_remove" required>
+            <label for="description">Beschreibung:</label>
+            <textarea id="description" name="description" required></textarea>
 
-                <input type="submit" value="Artikel entfernen">
-            </form>
-        </div>
-    </div>
-
-
-    <div class="container">
-        <div class="form-container">
-            <h2>Gericht bearbeiten</h2>
-            <form method="post" action="/edit_item">
-                <label for="item_to_edit">Gerichtname:</label>
-                <input type="text" id="item_to_edit" name="item_to_edit" required>
-
-                <label for="new_price">Neuer Preis:</label>
-                <input type="number" id="new_price" name="new_price" step="0.01">
-
-                <label for="new_description">Neue Beschreibung:</label>
-                <textarea id="new_description" name="new_description"></textarea>
-
-                <input type="submit" value="Artikel bearbeiten">
-            </form>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="form-container">
-            <!-- Weitere Formulare ... -->
-            <div class="view-orders">
-                <form action="/view_restaurant_orders" method="get">
-                    <input type="submit" value="Bestellungen ansehen">
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container">
-        <form action="{{ url_for('Rlogout') }}" method="post">
-            <input class="logout-button" type="submit" value="Ausloggen">
+            <input type="submit" value="Artikel hinzufügen">
         </form>
     </div>
+</div>
 
+
+<div class="container">
+    <div class="form-container">
+        <h2>Gericht entfernen</h2>
+        <form method="post" action="/remove_item">
+            <label for="item_to_remove">Gerichtname</label>
+            <input type="text" id="item_to_remove" name="item_to_remove" required>
+
+            <input type="submit" value="Artikel entfernen">
+        </form>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="form-container">
+        <h2>Gericht bearbeiten</h2>
+        <form method="post" action="/edit_item">
+            <label for="item_to_edit">Gerichtname:</label>
+            <input type="text" id="item_to_edit" name="item_to_edit" required>
+
+            <label for="new_price">Neuer Preis:</label>
+            <input type="number" id="new_price" name="new_price" step="0.01">
+
+            <label for="new_description">Neue Beschreibung:</label>
+            <textarea id="new_description" name="new_description"></textarea>
+
+            <input type="submit" value="Artikel bearbeiten">
+        </form>
+    </div>
+</div>
     
-    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-</body>
-</html>
+{% endblock %}

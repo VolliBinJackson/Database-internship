@@ -1,34 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles.css">
-    <title>Restaurant-Liste</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <div class="sidebar">
-        <h1 class="logo" style="color: white;">Lieferspatz</h1>
-   
-        <div class="sidebar-elements">
-            <a href="#">Lieferstatus</a>
-            <a href="{{ url_for('logout') }}">Ausloggen</a>
-        </div>
-    </div>
+{% block extra_css %}
+<link rel="stylesheet" href="../static/restaurant.css">
+{% endblock %}
 
+{% block title %}Restaurant-Liste{% endblock %}
 
+{% block content %}
     <div class="container">
-        <h1>Verfügbare Restaurants</h1>
+        <h1 class="page-title">Verfügbare Restaurants</h1>
         <div class="restaurant-list">
-            {% for restaurant in restaurants %}
-            <div class="restaurant">
-                <h2>{{ restaurant[0] }}</h2>
-                <p>{{ restaurant[3] }}</p>
-                <a href="{{ url_for('restaurant_items', restaurant_id=restaurant[6])}}">Menü anzeigen</a>
-            </div>
+            {% for restaurant in items %}
+                <div class="restaurant">
+                    <h2>{{ restaurant[0] }}</h2>
+                    <p class="description">{{ restaurant[3] }}</p>
+                    <a href="{{ url_for('restaurant_items', restaurant_id=restaurant[6])}}" class="btn">Menü anzeigen</a>
+                </div>
             {% endfor %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

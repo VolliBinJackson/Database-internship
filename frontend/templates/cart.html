@@ -1,46 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warenkorb</title>
-    <link rel="stylesheet" href="../static/cart.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Warenkorb</h1>
+{% extends "base.html" %}
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        <div class="cart-items">
-            {% for item in cart_items %}
-            <div class="cart-item">
-                <h3>{{ item.name }}</h3>
-                <p>Preis: {{ item.price }} €</p>
-                <p>Anzahl: {{ item.quantity }}</p>
-                <p>Teilsumme: {{ item.total_price }} €</p>
-                <a href="{{ url_for('remove_from_cart', item_id=item.item_id) }}">Entfernen</a>
-            </div>
-            {% endfor %}
+{% block extra_css %} <link rel="stylesheet" href="../static/cart.css"> {% endblock %}
+
+{% block title %}Warenkorb{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Warenkorb</h1>
+    <div class="cart-items">
+        {% for item in cart_items %}
+        <div class="cart-item">
+            <h3>{{ item.name }}</h3>
+            <p>Preis: {{ '%.2f' | format(item.price) }} €</p>
+            <p>Anzahl: {{ item.quantity }}</p>
+            <p>Teilsumme: {{ '%.2f' | format(item.total_price) }} €</p>
+            <a href="{{ url_for('remove_from_cart', item_id=item.item_id) }}" class="remove-link">Entfernen</a>
         </div>
-        <div class="total">
-            <p>Gesamt: {{ total_price }} €</p>
-        </div>
+        {% endfor %}
+    </div>
+    <div class="total">
+        <p>Gesamt: {{ '%.2f' | format(total_price) }} €</p>
     </div>
 
-    <form action="{{ url_for('place_order') }}" method="post">
-        <!-- Andere Felder wie Lieferadresse usw. -->
-    
+    <form action="{{ url_for('place_order') }}" method="post" class="order-form">
         <label for="orderNote">Bestellnotiz:</label>
         <textarea id="orderNote" name="orderNote" rows="4" cols="50"></textarea>
-    
         <input type="submit" value="Bestellung aufgeben" class="submit-button">
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

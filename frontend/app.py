@@ -30,6 +30,12 @@ def login():
 
     return render_template('login.html', error=error_message)
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Sessiondaten löschen
+    session.clear()
+    return redirect(url_for('login'))
+
 
 @app.route('/Rlogin', methods=['GET', 'POST'])
 def Rlogin():
@@ -40,38 +46,27 @@ def Rlogin():
         restaurant_id = isRestaurantRegistered(username, password)
         if restaurant_id:
             session['restaurant_id'] = restaurant_id
-            return render_template('Rmain.html')
+            return redirect(url_for('Rmain'))
     
     return render_template('login.html')
 
 
 
-@app.route('/logout')
-def logout():
-    return redirect(url_for('login'))
-
-
-@app.route('/Rlogout', methods=['POST'])
-def Rlogout():
-    if request.method == 'POST':
-        return redirect(url_for('Rlogin'))
-
-@app.route('/main')
-def main():
-    return render_template('main.html')
-
-
+@app.route('/Rmain')
+def Rmain():
+    return render_template('Rmain.html')
 
 @app.route('/restaurant')
 def restaurant():
     user_plz = str(session.get('user_plz'))  # str da sonst fehler auftritt bei der like Operatio, da es anscheinend als int angesehen wird
+    current_time = datetime.now().strftime('%H:%M') 
     # Abfrage der Datenbank nach Restaurants, die an die Benutzer-PLZ liefern
     with sql.connect('database.db') as con:
         cur = con.cursor()
         cur.execute("SELECT * FROM restaurants WHERE Lieferradius LIKE ?", ('%' + user_plz + '%',))
         restaurants = cur.fetchall()
 
-    return render_template('restaurant.html', restaurants=restaurants)
+    return render_template('restaurant.html', items=restaurants)
 
 @app.route('/restaurant_register.html')
 def restaurant_register():
@@ -180,18 +175,18 @@ def remove_item():
                 cur = con.cursor()
                 cur.execute("DELETE FROM items WHERE ItemName=? AND RestaurantID=?", (item_to_remove, restaurant_id))
                 con.commit()
-                msg = "Gericht erfolgreich entfernt."
+                flash("Gericht erfolgreich entfernt.", 'warning')
             else:
-                msg = "Dieses Gericht gibt es nicht!"
+                flash("Dieses Gericht gibt es nicht!", 'warning')
         except Exception as e:
             con.rollback()
-            msg=f"Error in delete operation: {e}"
+            flash(f"Error in delete operation: {e}", 'warning')
         finally:
             if con:
                 con.close()
             # Hier holst du die aktualisierte Liste der Artikel für das bestimmte Restaurant
             items = get_items_for_restaurant(restaurant_id)
-            return render_template('Rmain.html', items=items, message=msg)
+            return render_template('Rmain.html', items=items,)
     else:
         return redirect(url_for('Rlogin'))
     
@@ -249,7 +244,23 @@ def add_to_cart(item_id, restaurant_id):
         flash('Sie können nicht gleichzeitig bei verschiedenen Restaurants bestellen. Leeren Sie Ihren Warenkorb oder fügen Sie Artikel aus demselben Restaurant hinzu.', 'warning')
         return redirect(url_for('restaurant_items', restaurant_id=restaurant_id))
 
+def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        cur.execute("SELECT restaurantID FROM cart WHERE userID = ?", (user_id,))
+        existing_restaurant_id = cur.fetchone()
+        if existing_restaurant_id and existing_restaurant_id[0] != restaurant_id:
+            return False
 
+        cur.execute("SELECT quantity FROM cart WHERE userID = ? AND itemID = ? AND restaurantID = ?", (user_id, item_id, restaurant_id))
+        result = cur.fetchone()
+        if result:
+            new_quantity = result[0] + int(quantity)
+            cur.execute("UPDATE cart SET quantity = ? WHERE userID = ? AND itemID = ? AND restaurantID = ?", (new_quantity, user_id, item_id, restaurant_id))
+        else:
+            cur.execute("INSERT INTO cart (userID, itemID, restaurantID, quantity) VALUES (?, ?, ?, ?)", (user_id, item_id, restaurant_id, quantity))
+        con.commit()
+    return True
 
 @app.route('/remove_from_cart', methods=['GET'])
 def remove_from_cart():
@@ -398,14 +409,13 @@ def view_restaurant_orders():
             })
 
 
-    return render_template('Rorder_history.html', orders=orders)
+    return render_template('Rorders.html', orders=orders)
 
 
-# Beispielroute für die Bestätigung der Bestellung durch das Restaurant
-@app.route('/accept_order/<int:order_id>')
-def accept_order(order_id):
-    # Hier können Sie die Logik für die Bestätigung implementieren
-    # Z.B. Aktualisieren Sie den Status in der Datenbank auf 'In Zubereitung'
+
+@app.route('/confirm_order/<int:order_id>')
+def confirm_order(order_id):
+
     with sql.connect('database.db') as con:
         cur = con.cursor()
         cur.execute("UPDATE orders SET DeliveryState = 'In Zubereitung' WHERE OrderID = ?", (order_id,))
@@ -415,11 +425,9 @@ def accept_order(order_id):
     return redirect(url_for('view_restaurant_orders'))
 
 
-# Beispielroute für das Stornieren einer Bestellung durch das Restaurant
 @app.route('/cancel_order/<int:order_id>')
 def cancel_order(order_id):
-    # Hier können Sie die Logik für die Stornierung implementieren
-    # Z.B. Aktualisieren Sie den Status in der Datenbank auf 'Storniert'
+ 
     with sql.connect('database.db') as con:
         cur = con.cursor()
         cur.execute("UPDATE orders SET DeliveryState = 'Storniert' WHERE OrderID = ?", (order_id,))
@@ -428,11 +436,10 @@ def cancel_order(order_id):
     flash('Bestellung wurde storniert.', 'danger')
     return redirect(url_for('view_restaurant_orders'))
 
-# Beispielroute für das Abschließen einer Bestellung durch das Restaurant
+
 @app.route('/complete_order/<int:order_id>')
 def complete_order(order_id):
-    # Hier können Sie die Logik für den Abschluss implementieren
-    # Z.B. Aktualisieren Sie den Status in der Datenbank auf 'Abgeschlossen'
+
     with sql.connect('database.db') as con:
         cur = con.cursor()
         cur.execute("UPDATE orders SET DeliveryState = 'Abgeschlossen' WHERE OrderID = ?", (order_id,))
