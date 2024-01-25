@@ -7,6 +7,17 @@
     <title>Restaurant-Liste</title>
 </head>
 <body>
+
+    <div class="sidebar">
+        <h1 class="logo" style="color: white;">Lieferspatz</h1>
+   
+        <div class="sidebar-elements">
+            <a href="#">Lieferstatus</a>
+            <a href="{{ url_for('logout') }}">Ausloggen</a>
+        </div>
+    </div>
+
+
     <div class="container">
         <h1>Verfügbare Restaurants</h1>
         <div class="restaurant-list">
