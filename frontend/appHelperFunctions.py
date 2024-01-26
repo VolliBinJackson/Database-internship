@@ -1,5 +1,5 @@
 import sqlite3 as sql
-from flask import session
+
 
 # Check if User is already registered
 def isUserRegistered(username, password):
@@ -49,12 +49,33 @@ def is_item_in_restaurant(item_name, restaurant_id):
         count = cur.fetchone()[0]
     return count > 0
 
+
 def load_user_cart(user_id):
     with sql.connect('database.db') as con:
         cur = con.cursor()
         cur.execute("SELECT itemID, quantity FROM cart WHERE userID = ?", (user_id,))
         cart_items = cur.fetchall()
     return cart_items
+
+
+def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        cur.execute("SELECT restaurantID FROM cart WHERE userID = ?", (user_id,))
+        existing_restaurant_id = cur.fetchone()
+        if existing_restaurant_id and existing_restaurant_id[0] != restaurant_id:
+            return False
+
+        cur.execute("SELECT quantity FROM cart WHERE userID = ? AND itemID = ? AND restaurantID = ?", (user_id, item_id, restaurant_id))
+        result = cur.fetchone()
+        if result:
+            new_quantity = result[0] + int(quantity)
+            cur.execute("UPDATE cart SET quantity = ? WHERE userID = ? AND itemID = ? AND restaurantID = ?", (new_quantity, user_id, item_id, restaurant_id))
+        else:
+            cur.execute("INSERT INTO cart (userID, itemID, restaurantID, quantity) VALUES (?, ?, ?, ?)", (user_id, item_id, restaurant_id, quantity))
+        con.commit()
+    return True
+
 
 def get_delivery_address_for_user(user_id):
     with sql.connect('database.db') as con:
@@ -68,6 +89,7 @@ def get_delivery_address_for_user(user_id):
         else:
             return None  # Keine Adresse gefunden oder Benutzer existiert nicht
         
+
 def get_cart_items_for_user(user_id):
     con = sql.connect("database.db")
     cur = con.cursor()
