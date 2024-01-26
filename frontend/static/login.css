@@ -8,13 +8,6 @@ body {
     margin: 0;
 }
 
-/* Ändere header*/
-#headerform {
-    background-color: darkgreen;
-    color: white;
-    text-align: top;
-    padding: 10px;
-}
 
 #login {
     width: 300px;
