@@ -31,6 +31,7 @@
         {% if error %}
     <input type="checkbox" id="error-checkbox" style="display:none;" />
 
+    
     <!-- Fehlermeldung mit einem X zum Schließen -->
     <label for="error-checkbox" class="error-message">
         {{ error }} 
@@ -47,15 +48,12 @@
             <input type="password" id="password" name="password" required>
 
             <input type="submit" value="Einloggen">
-        
-        
         </form>
         <button onclick="window.location.href = 'register.html';" id="myButton" class="float-left submit-button" >Kunde Registrieren</button>
-        
-        
-   </div>
+    </div>
 
-   <div id="login">
+   
+    <div id="login">
     <h2>Anmelden (Restaurant)</h2>
     <form id="loginForm" action="{{ url_for('Rlogin') }}" method="POST">
         <label for="username">Name:</label>
@@ -73,7 +71,4 @@
    </div>
 
 </body>
-<!-- Nötig, um Bilder einzufügen: IonIcons Framework -->
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </html>
