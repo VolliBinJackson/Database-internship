@@ -2,10 +2,7 @@ import logging
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3 as sql
-from PIL import Image, ImageTk
-from io import BytesIO
 from appHelperFunctions import *
-import sys
 
 app = Flask(__name__)
 app.secret_key = 'Ihr_geheimer_Schlüssel_hier'
@@ -58,15 +55,23 @@ def Rmain():
 
 @app.route('/restaurant')
 def restaurant():
-    user_plz = str(session.get('user_plz'))  # str da sonst fehler auftritt bei der like Operatio, da es anscheinend als int angesehen wird
-    current_time = datetime.now().strftime('%H:%M') 
-    # Abfrage der Datenbank nach Restaurants, die an die Benutzer-PLZ liefern
+    user_plz = str(session.get('user_plz'))  # Umwandlung in String für die LIKE-Operation
+    current_time = datetime.now().strftime('%H:%M')  # Aktuelle Zeit im HH:MM-Format
+
+    # Abfrage der Datenbank nach Restaurants, die an die Benutzer-PLZ liefern und aktuell geöffnet sind
     with sql.connect('database.db') as con:
         cur = con.cursor()
-        cur.execute("SELECT * FROM restaurants WHERE Lieferradius LIKE ?", ('%' + user_plz + '%',))
+        query = """
+        SELECT * FROM restaurants 
+        WHERE Lieferradius LIKE ? 
+        AND OpenTime <= ? 
+        AND CloseTime > ?
+        """
+        cur.execute(query, ('%' + user_plz + '%', current_time, current_time))
         restaurants = cur.fetchall()
 
     return render_template('restaurant.html', items=restaurants)
+
 
 @app.route('/restaurant_register.html')
 def restaurant_register():
@@ -104,8 +109,10 @@ def addrec():
             con.close()
             # Send the transaction message to result.html
             return render_template('login.html')
+
+ 
         
-@app.route("/Raddrec", methods = ['POST', 'GET'])
+@app.route("/Raddrec", methods=['POST', 'GET'])
 def Raddrec():
     if request.method == 'POST':
         try:
@@ -113,25 +120,25 @@ def Raddrec():
             password = request.form['password']
             adresse = request.form['adresse']
             beschreibung = request.form['description']
-            plz = request.form['plz']  
+            plz = request.form['plz']
+            open_time = request.form['openTime']
+            close_time = request.form['closeTime']
 
             # Datenbankverbindung herstellen und Daten einfügen
             with sql.connect('database.db') as cons:
                 cur = cons.cursor()
-                cur.execute("INSERT INTO restaurants (Name, Password, RestaurantAddress, RestaurantDescription, Lieferradius) VALUES (?, ?, ?, ?, ?)", 
-                            (name, password, adresse, beschreibung, plz))
+                cur.execute("INSERT INTO restaurants (Name, Password, RestaurantAddress, RestaurantDescription, Lieferradius, OpenTime, CloseTime) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                            (name, password, adresse, beschreibung, plz, open_time, close_time))
 
                 cons.commit()
-                msg = "Restaurant erfolgreich zur Datenbank hinzugefügt."
         except:
             cons.rollback()
             msg = "Fehler beim Einfügen des Datensatzes in die Datenbank."
 
         finally:
             cons.close()
-            return render_template('login.html', message=msg)  
-
-    
+            flash("Registrierung war erfolgreich", "warning")
+            return render_template('login.html',)
 
         
 
@@ -160,6 +167,7 @@ def add_item():
     else:
         return redirect(url_for('Rlogin'))
     
+
 
 @app.route('/remove_item', methods=['POST'])
 def remove_item():
@@ -190,6 +198,7 @@ def remove_item():
     else:
         return redirect(url_for('Rlogin'))
     
+
 
 @app.route('/edit_item', methods=['POST'])
 def edit_item():
@@ -222,6 +231,7 @@ def edit_item():
         return redirect(url_for('Rlogin'))
     
     
+
 @app.route('/restaurant/<int:restaurant_id>')
 def restaurant_items(restaurant_id):
     with sql.connect('database.db') as con:
@@ -244,6 +254,8 @@ def add_to_cart(item_id, restaurant_id):
         flash('Sie können nicht gleichzeitig bei verschiedenen Restaurants bestellen. Leeren Sie Ihren Warenkorb oder fügen Sie Artikel aus demselben Restaurant hinzu.', 'warning')
         return redirect(url_for('restaurant_items', restaurant_id=restaurant_id))
 
+
+
 def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
     with sql.connect('database.db') as con:
         cur = con.cursor()
@@ -262,23 +274,28 @@ def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
         con.commit()
     return True
 
-@app.route('/remove_from_cart', methods=['GET'])
-def remove_from_cart():
-    item_id = request.args.get('item_id')
+
+
+@app.route('/remove_from_cart/<item_id>', methods=['GET'])
+def remove_from_cart(item_id):
     user_id = session.get('user_id')
-   
+
     with sql.connect('database.db') as con:
         cur = con.cursor()
         try:
-            print(user_id)
-            print(item_id)
-            cur.execute("DELETE FROM cart WHERE userID = ? AND itemID = ?", (user_id, item_id))
+            # Menge um 1 verringern
+            cur.execute("UPDATE cart SET quantity = quantity - 1 WHERE userID = ? AND itemID = ?", (user_id, item_id))
+            
+            # Wenn Menge 0 ist, Artikel aus dem Warenkorb entfernen
+            cur.execute("DELETE FROM cart WHERE userID = ? AND itemID = ? AND quantity <= 0", (user_id, item_id))
+
             con.commit()
         except Exception as e:
             print(f"Fehler: {e}")
-            # Optional: Weitere Fehlerbehandlung hier
 
     return redirect(url_for('cart'))
+
+
 
 @app.route('/cart')
 def cart():
@@ -288,6 +305,8 @@ def cart():
 
     total_price = sum(item['total_price'] for item in items_details)
     return render_template('cart.html', cart_items=items_details, total_price=total_price)
+
+
 
 @app.route('/place_order', methods=['POST'])
 def place_order():
@@ -302,7 +321,8 @@ def place_order():
         return redirect(url_for('cart'))
 
     # Extrahieren der RestaurantID vom ersten Artikel im Warenkorb
-    restaurant_id = cart_items[0]['restaurant_id'] if cart_items else None
+    restaurant_id = cart_items[0]['restaurant_id'] if cart_items and 'restaurant_id' in cart_items[0] else None
+
 
     order_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -330,6 +350,7 @@ def place_order():
     return redirect(url_for('order_history'))
 
 
+
 @app.route('/order_history')
 def order_history():
     user_id = session.get('user_id')
@@ -347,7 +368,7 @@ def order_history():
             WHERE UserID = ? 
             ORDER BY 
                 CASE 
-                    WHEN DeliveryState IN ('In Bearbeitung', 'Unterwegs') THEN 1 
+                    WHEN DeliveryState IN ('in Bearbeitung', 'in Zubereitung') THEN 1 
                     ELSE 2 
                 END, 
                 OrderDate DESC
@@ -374,6 +395,8 @@ def order_history():
             orders.append(order_details)
 
     return render_template('order_history.html', orders=orders)
+
+
 
 @app.route('/view_restaurant_orders')
 def view_restaurant_orders():
@@ -425,6 +448,7 @@ def confirm_order(order_id):
     return redirect(url_for('view_restaurant_orders'))
 
 
+
 @app.route('/cancel_order/<int:order_id>')
 def cancel_order(order_id):
  
@@ -437,6 +461,7 @@ def cancel_order(order_id):
     return redirect(url_for('view_restaurant_orders'))
 
 
+
 @app.route('/complete_order/<int:order_id>')
 def complete_order(order_id):
 
@@ -445,8 +470,9 @@ def complete_order(order_id):
         cur.execute("UPDATE orders SET DeliveryState = 'Abgeschlossen' WHERE OrderID = ?", (order_id,))
         con.commit()
 
-    flash('Bestellung wurde abgeschlossen und versandt.', 'success')
+    flash('Bestellung wurde abgeschlossen und geliefert.', 'success')
     return redirect(url_for('view_restaurant_orders'))
+
 
 
 if __name__ == "__main__":

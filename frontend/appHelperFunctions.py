@@ -26,7 +26,7 @@ def isRestaurantRegistered(name, password):
     con.close()
     
     if restaurant:
-        restaurant_ID = restaurant[6]
+        restaurant_ID = restaurant[8]
         return restaurant_ID
     else:
         return None
@@ -69,25 +69,13 @@ def get_delivery_address_for_user(user_id):
             return None  # Keine Adresse gefunden oder Benutzer existiert nicht
         
 def get_cart_items_for_user(user_id):
-    items_details = []
-    with sql.connect('database.db') as con:
-        cur = con.cursor()
-        # Ergänzung der RestaurantID in der SELECT-Abfrage
-        cur.execute("SELECT i.ItemID, i.ItemName, i.Price, i.ItemDescription, c.quantity, i.RestaurantID FROM items i INNER JOIN cart c ON i.ItemID = c.itemID WHERE c.userID = ?", (user_id,))
-        rows = cur.fetchall()
-
-        for row in rows:
-            item_id, name, price, description, quantity, restaurant_id = row  
-            items_details.append({
-                'name': name,
-                'price': price,
-                'description': description,
-                'quantity': quantity,
-                'total_price': price * quantity,
-                'item_id': item_id,
-                'restaurant_id': restaurant_id  
-            })
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT items.ItemName, items.Price, cart.quantity, cart.itemID, cart.restaurantID, (items.Price * cart.quantity) as total_price FROM cart JOIN items ON cart.itemID = items.itemID WHERE cart.userID = ?", (user_id,))
+    items_details = [{'name': row[0], 'price': row[1], 'quantity': row[2], 'item_id': row[3], 'restaurant_id': row[4], 'total_price': row[5]} for row in cur.fetchall()]
+    con.close()
     return items_details
+
 
 
 

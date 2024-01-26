@@ -67,3 +67,26 @@ body {
     display: none;
 }
 
+.alert {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #4CAF50; /* Grün */
+}
+
+.alert-info {
+    background-color: #2196F3; /* Blau */
+}
+
+.alert-warning {
+    background-color: #ff9800; /* Orange */
+}
+
+.alert-danger {
+    background-color: #f44336; /* Rot */
+}
