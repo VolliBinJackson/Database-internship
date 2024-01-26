@@ -7,7 +7,14 @@ def createUserTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS customers")
-    cur.execute("CREATE TABLE users (Vorname VARCHAR(30) NOT NULL, Nachname VARCHAR(30) NOT NULL, Password STRING NOT NULL, CustomerStrasse_HausNr STRING NOT NULL, CustomerPLZ INTEGER NOT NULL, UserID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("""
+                CREATE TABLE users (
+                    Vorname VARCHAR(30) NOT NULL, 
+                    Nachname VARCHAR(30) NOT NULL, 
+                    Password STRING NOT NULL, 
+                    CustomerStrasse_HausNr STRING NOT NULL, 
+                    CustomerPLZ INTEGER NOT NULL, 
+                    UserID INTEGER PRIMARY KEY AUTOINCREMENT)""")
     con.commit()
     con.close()
 
@@ -16,7 +23,17 @@ def createRestaurantTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS restaurants")
-    cur.execute("CREATE TABLE restaurants (Name VARCHAR(30) NOT NULL, Password STRING NOT NULL, RestaurantAddress STRING NOT NULL, RestaurantDescription STRING NOT NULL, RestaurantPicture BLOB, Lieferradius TEXT, OpenTime TIME, CloseTime TIME, RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)")
+    cur.execute("""
+                CREATE TABLE restaurants (
+                    Name VARCHAR(30) NOT NULL,
+                    Password STRING NOT NULL,
+                    RestaurantAddress STRING NOT NULL,
+                    RestaurantDescription STRING NOT NULL, 
+                    RestaurantPicture BLOB, 
+                    Lieferradius TEXT, 
+                    OpenTime TIME, 
+                    CloseTime TIME,
+                    RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT)""")
     con.commit()
     con.close()
 
@@ -62,7 +79,13 @@ def createItemTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS items")
-    cur.execute("CREATE TABLE items (ItemName STRING NOT NULL, Price FLOAT, Picture BLOB, ItemDescription STRING NOT NULL, RestaurantID INTEGER, ItemID INTEGER PRIMARY KEY AUTOINCREMENT, FOREIGN KEY (RestaurantID) REFERENCES restaurants (RestaurantID))")
+    cur.execute("""CREATE TABLE items (
+                    ItemName STRING NOT NULL,
+                    Price FLOAT, Picture BLOB, 
+                    ItemDescription STRING NOT NULL, 
+                    RestaurantID INTEGER, 
+                    ItemID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    FOREIGN KEY (RestaurantID) REFERENCES restaurants (RestaurantID))""")
     con.commit()
     con.close()
 
@@ -70,7 +93,14 @@ def createCartTable():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("DROP TABLE IF EXISTS cart")
-    cur.execute("CREATE TABLE cart (userID int, itemID int, restaurantID INT, quantity int,  note TEXT, FOREIGN KEY (userID) REFERENCES users(userID), FOREIGN KEY (itemID) REFERENCES items(ItemID))")
+    cur.execute("""CREATE TABLE cart (
+                    userID INT, 
+                    itemID INT, 
+                    restaurantID INT, 
+                    quantity INT,  
+                    note TEXT, 
+                    FOREIGN KEY (userID) REFERENCES users(userID),
+                    FOREIGN KEY (itemID) REFERENCES items(ItemID))""")
     con.commit()
     con.close()
 

@@ -13,7 +13,7 @@ body {
     overflow: hidden;
 }
 
-/* Kopfzeile und Navigation */
+
 header {
     background: #333;
     color: #fff;
@@ -40,10 +40,10 @@ header ul {
 
 header li {
     display: inline;
-    margin: 0 10px; /* Verringern Sie den horizontalen Abstand nach Bedarf */
+    margin: 0 10px; 
 }
 
-/* Button-Stil */
+
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -97,11 +97,9 @@ header li {
 
 .nav-links {
     list-style-type: none;
-    /* Weitere Stile für die Navigationslinks */
 }
 
 .cart-icon-container {
-    /* Stile für das Warenkorb-Icon */
 position: fixed;
 top: 20px;
 right: 20px;
@@ -118,12 +116,12 @@ padding: 10px; /* Platz um das Symbol herum */
 }
 
 .cart-icon:hover {
-background-color: #333; /* Hintergrundfarbe bei Hover */
-color: #fff; /* Farbe bei Hover */
+background-color: #333; 
+color: #fff; 
 }
 
 .logout-container {
-    margin-left: auto; /* Falls Sie möchten, dass es auf der rechten Seite der Navigationsleiste erscheint */
+    margin-left: auto; 
 }
 
 .logout-button {
