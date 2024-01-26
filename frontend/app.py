@@ -27,12 +27,6 @@ def login():
 
     return render_template('login.html', error=error_message)
 
-@app.route('/logout', methods=['POST'])
-def logout():
-    # Sessiondaten löschen
-    session.clear()
-    return redirect(url_for('login'))
-
 
 @app.route('/Rlogin', methods=['GET', 'POST'])
 def Rlogin():
@@ -47,6 +41,76 @@ def Rlogin():
     
     return render_template('login.html')
 
+
+@app.route('/restaurant_register.html')
+def restaurant_register():
+    return render_template('restaurant_register.html')
+
+
+@app.route('/register.html')
+def register():
+    return render_template('register.html')
+
+
+
+@app.route("/addrec", methods = ['POST', 'GET'])
+def addrec():
+    if request.method == 'POST':
+        try:
+            vorname = request.form['vorname']
+            nachname = request.form['nachname']
+            password = request.form['password']     
+            strasse = request.form['adresse']
+            PLZ = request.form['plz']
+
+            # execute the INSERT
+            with sql.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO users (Vorname, Nachname, Password, CustomerStrasse_HausNr, CustomerPLZ) VALUES (?,?,?,?,?)",(vorname, nachname, password, strasse, PLZ ))
+
+                con.commit()
+                msg = "Record successfully added to database"
+        except:
+            con.rollback()
+            msg = "Error in the INSERT"
+
+        finally:
+            con.close()
+            return render_template('login.html')
+        
+
+@app.route("/Raddrec", methods=['POST', 'GET'])
+def Raddrec():
+    if request.method == 'POST':
+        try:
+            name = request.form['vorname']
+            password = request.form['password']
+            adresse = request.form['adresse']
+            beschreibung = request.form['description']
+            plz = request.form['plz']
+            open_time = request.form['openTime']
+            close_time = request.form['closeTime']
+
+            # Datenbankverbindung herstellen und Daten einfügen
+            with sql.connect('database.db') as cons:
+                cur = cons.cursor()
+                cur.execute("INSERT INTO restaurants (Name, Password, RestaurantAddress, RestaurantDescription, Lieferradius, OpenTime, CloseTime) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                            (name, password, adresse, beschreibung, plz, open_time, close_time))
+
+                cons.commit()
+        except:
+            cons.rollback()
+        finally:
+            cons.close()
+            flash("Registrierung war erfolgreich", "warning")
+            return render_template('login.html',)
+        
+        
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Sessiondaten löschen
+    session.clear()
+    return redirect(url_for('login'))
 
 
 @app.route('/Rmain')
@@ -73,74 +137,6 @@ def restaurant():
     return render_template('restaurant.html', items=restaurants)
 
 
-@app.route('/restaurant_register.html')
-def restaurant_register():
-    return render_template('restaurant_register.html')
-
-
-@app.route('/register.html')
-def register():
-    return render_template('register.html')
-
-
-@app.route("/addrec", methods = ['POST', 'GET'])
-def addrec():
-    # Data will be available from POST submitted by the form
-    if request.method == 'POST':
-        try:
-            vorname = request.form['vorname']
-            nachname = request.form['nachname']
-            password = request.form['password']     
-            strasse = request.form['adresse']
-            PLZ = request.form['plz']
-
-            # Connect to SQLite3 database and execute the INSERT
-            with sql.connect('database.db') as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO users (Vorname, Nachname, Password, CustomerStrasse_HausNr, CustomerPLZ) VALUES (?,?,?,?,?)",(vorname, nachname, password, strasse, PLZ ))
-
-                con.commit()
-                msg = "Record successfully added to database"
-        except:
-            con.rollback()
-            msg = "Error in the INSERT"
-
-        finally:
-            con.close()
-            # Send the transaction message to result.html
-            return render_template('login.html')
-
- 
-        
-@app.route("/Raddrec", methods=['POST', 'GET'])
-def Raddrec():
-    if request.method == 'POST':
-        try:
-            name = request.form['vorname']
-            password = request.form['password']
-            adresse = request.form['adresse']
-            beschreibung = request.form['description']
-            plz = request.form['plz']
-            open_time = request.form['openTime']
-            close_time = request.form['closeTime']
-
-            # Datenbankverbindung herstellen und Daten einfügen
-            with sql.connect('database.db') as cons:
-                cur = cons.cursor()
-                cur.execute("INSERT INTO restaurants (Name, Password, RestaurantAddress, RestaurantDescription, Lieferradius, OpenTime, CloseTime) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-                            (name, password, adresse, beschreibung, plz, open_time, close_time))
-
-                cons.commit()
-        except:
-            cons.rollback()
-            msg = "Fehler beim Einfügen des Datensatzes in die Datenbank."
-
-        finally:
-            cons.close()
-            flash("Registrierung war erfolgreich", "warning")
-            return render_template('login.html',)
-
-        
 
 @app.route("/add_item", methods=['POST'])
 def add_item():
@@ -192,7 +188,7 @@ def remove_item():
         finally:
             if con:
                 con.close()
-            # Hier holst du die aktualisierte Liste der Artikel für das bestimmte Restaurant
+            # aktualisierte Liste der Artikel für das bestimmte Restaurant holen
             items = get_items_for_restaurant(restaurant_id)
             return render_template('Rmain.html', items=items,)
     else:
@@ -243,36 +239,14 @@ def restaurant_items(restaurant_id):
 
 @app.route('/add_to_cart/<int:item_id>/<int:restaurant_id>', methods=['POST'])
 def add_to_cart(item_id, restaurant_id):
-   
     user_id = session.get('user_id')
     quantity = request.form.get('quantity', 1)
 
     if add_item_to_cart(user_id, item_id, quantity, restaurant_id):
         return redirect(url_for('restaurant_items', restaurant_id=restaurant_id))
-    
     else:
         flash('Sie können nicht gleichzeitig bei verschiedenen Restaurants bestellen. Leeren Sie Ihren Warenkorb oder fügen Sie Artikel aus demselben Restaurant hinzu.', 'warning')
         return redirect(url_for('restaurant_items', restaurant_id=restaurant_id))
-
-
-
-def add_item_to_cart(user_id, item_id, quantity, restaurant_id):
-    with sql.connect('database.db') as con:
-        cur = con.cursor()
-        cur.execute("SELECT restaurantID FROM cart WHERE userID = ?", (user_id,))
-        existing_restaurant_id = cur.fetchone()
-        if existing_restaurant_id and existing_restaurant_id[0] != restaurant_id:
-            return False
-
-        cur.execute("SELECT quantity FROM cart WHERE userID = ? AND itemID = ? AND restaurantID = ?", (user_id, item_id, restaurant_id))
-        result = cur.fetchone()
-        if result:
-            new_quantity = result[0] + int(quantity)
-            cur.execute("UPDATE cart SET quantity = ? WHERE userID = ? AND itemID = ? AND restaurantID = ?", (new_quantity, user_id, item_id, restaurant_id))
-        else:
-            cur.execute("INSERT INTO cart (userID, itemID, restaurantID, quantity) VALUES (?, ?, ?, ?)", (user_id, item_id, restaurant_id, quantity))
-        con.commit()
-    return True
 
 
 
@@ -299,7 +273,7 @@ def remove_from_cart(item_id):
 
 @app.route('/cart')
 def cart():
-    # Hier müssen Sie die Benutzer-ID des aktuellen Benutzers abrufen
+    # Benutzer-ID des aktuellen Benutzers abrufen
     user_id = session.get('user_id') 
     items_details = get_cart_items_for_user(user_id)
 
@@ -430,8 +404,7 @@ def view_restaurant_orders():
                 'total_price': total_price,
                 'order_note': OrderNote  # Angenommen, die Order-Note ist an der 7. Position
             })
-
-
+    
     return render_template('Rorders.html', orders=orders)
 
 
