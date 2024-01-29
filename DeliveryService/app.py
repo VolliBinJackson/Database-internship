@@ -236,6 +236,13 @@ def restaurant_items(restaurant_id):
         return render_template('restaurant_items.html', items=items, restaurant_id = restaurant_id)
 
         
+@app.route('/Speisekarte/<int:restaurant_id>')
+def menu_items(restaurant_id):
+    with sql.connect('database.db') as con:
+        cur = con.cursor()
+        items = cur.execute("SELECT * FROM items WHERE RestaurantID = ?", (restaurant_id,)).fetchall()
+        return render_template('menu_items.html', items=items, restaurant_id = restaurant_id)
+
 
 @app.route('/add_to_cart/<int:item_id>/<int:restaurant_id>', methods=['POST'])
 def add_to_cart(item_id, restaurant_id):
@@ -287,7 +294,6 @@ def place_order():
     user_id = session.get('user_id')
     delivery_address = get_delivery_address_for_user(user_id)
     order_note = request.form.get('orderNote')
-    print(order_note)
     cart_items = get_cart_items_for_user(user_id)
 
     if not cart_items:
@@ -402,7 +408,7 @@ def view_restaurant_orders():
                 'address': address,
                 'items': items,
                 'total_price': total_price,
-                'order_note': OrderNote  # Angenommen, die Order-Note ist an der 7. Position
+                'order_note': OrderNote 
             })
     
     return render_template('Rorders.html', orders=orders)

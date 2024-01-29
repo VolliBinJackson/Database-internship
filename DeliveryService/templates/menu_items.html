@@ -1,0 +1,20 @@
+{% extends 'Rbase.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="../static/menu.css">
+{% endblock %}
+
+{% block title %}Speisekarte{% endblock %}
+
+{% block content %}
+    <h1>Speisekarte</h1>
+    <div class="menu">
+        {% for item in items %}
+        <div class="menu-item">
+            <h3>{{ item[0] }}</h3>
+            <p>Preis: {{ '%.2f' | format(item[1]) }} €</p>
+            <p>{{ item[3] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -12,6 +12,7 @@
         <div class="container header-container">
             <ul class="nav-links">
                 <li><a href="{{ url_for('Rmain') }}">Startseite</a></li>
+                <li><a href="{{ url_for('menu_items', restaurant_id=session.get('restaurant_id') ) }}">Speisekarte</a></li>
                 <li><a href="{{ url_for('view_restaurant_orders') }}">Bestellungen</a></li>
                 <!-- Weitere Links nach Bedarf -->
             </ul>

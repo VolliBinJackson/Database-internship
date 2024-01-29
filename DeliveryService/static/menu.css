@@ -1,0 +1,341 @@
+/* Grundlegende Styles */
+
+body {
+
+    font-family: 'Arial', sans-serif;
+
+    margin: 0;
+
+    padding: 0;
+
+    background-color: #f4f4f4;
+
+    color: #333;
+
+}
+
+ 
+
+.container {
+
+    width: 80%;
+
+    margin: auto;
+
+    overflow: hidden;
+
+}
+
+ 
+
+header {
+
+    background: #333;
+
+    color: #fff;
+
+    padding-top: 30px;
+
+    min-height: 70px;
+
+    border-bottom: #bbb 1px solid;
+
+}
+
+ 
+
+header a {
+
+    color: #fff;
+
+    text-decoration: none;
+
+    text-transform: uppercase;
+
+    font-size: 16px;
+
+}
+
+ 
+
+header ul {
+
+    padding: 0;
+
+    list-style: none;
+
+    text-align: center;
+
+    display: flex;
+
+    align-items: center; /* Vertikal zentrieren */
+
+    justify-content: center; /* Horizontal zentrieren */
+
+}
+
+ 
+
+header li {
+
+    display: inline;
+
+    margin: 0 10px;
+
+}
+
+ 
+
+.btn {
+
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    background-color: #007bff;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 5px;
+
+    transition: background-color 0.3s;
+
+}
+
+ 
+
+.btn-primary:hover {
+
+    background-color: #0056b3;
+
+}
+
+ 
+
+/* Responsive Design */
+
+@media only screen and (max-width: 600px) {
+
+    .restaurant-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+ 
+
+.alert {
+
+    margin-bottom: 10px;
+
+    padding: 10px;
+
+    border-radius: 5px;
+
+    color: white;
+
+    text-align: center;
+
+}
+
+ 
+
+.alert-success {
+
+    background-color: #4CAF50; /* Grün */
+
+}
+
+ 
+
+.alert-info {
+
+    background-color: #2196F3; /* Blau */
+
+}
+
+ 
+
+.alert-warning {
+
+    background-color: #ff9800; /* Orange */
+
+}
+
+ 
+
+.alert-danger {
+
+    background-color: #f44336; /* Rot */
+
+}
+
+ 
+
+.header-container {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+ 
+
+.nav-links {
+
+    list-style-type: none;
+
+}
+
+ 
+
+.cart-icon-container {
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 20px;
+
+    z-index: 999;
+
+}
+
+ 
+
+.cart-icon {
+
+    font-size: 40px;
+
+    cursor: pointer;
+
+    color: #333; /* Farbe des Einkaufswagensymbols */
+
+    border: 1px solid #333; /* Umrandung des Symbols */
+
+    border-radius: 50%; /* Kreisform */
+
+    padding: 10px; /* Platz um das Symbol herum */
+
+}
+
+ 
+
+.cart-icon:hover {
+
+    background-color: #333;
+
+    color: #fff;
+
+}
+
+ 
+
+.logout-container {
+
+    margin-left: auto;
+
+}
+
+ 
+
+.logout-button {
+
+    padding: 5px 10px;
+
+    background-color: #f44336;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+}
+
+ 
+
+.logout-button:hover {
+
+    background-color: #d32f2f;
+
+}
+
+ 
+
+/* Neuer Stil für die Speisekarte */
+
+.menu {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: space-around;
+
+    margin-top: 20px;
+
+}
+
+ 
+
+.menu-item {
+
+    background-color: #fff;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    border-radius: 8px;
+
+    margin: 15px;
+
+    padding: 15px;
+
+    width: 300px;
+
+    text-align: left;
+
+}
+
+ 
+
+.menu-item h3 {
+
+    color: #333;
+
+    font-size: 20px;
+
+    margin-bottom: 10px;
+
+}
+
+ 
+
+.menu-item p {
+
+    color: #666;
+
+    font-size: 14px;
+
+    margin-bottom: 5px;
+
+}
+
+ 
+
+/* Stil für den gesamten Inhalt */
+
+.content-container {
+
+    padding: 20px;
+
+}
