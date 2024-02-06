@@ -1,8 +1,8 @@
 In diesem Projekt geht es um die Implementation und Bereitstellung eines Online Lieferdienstes. Dafür wurde HTML/CSS für die Frontendseite verwendet und Flask für die serverseitige Logik. Als Datenbank für die Speicherung von User, Restaurants,
 Bestellungsdetails etc. wird MySQLite3 verwendet.
-Die Funktionalität der Webseite war bei der Implementierung im Fokus gewesen, somit wurde der stilistische Aspekt mit CSS etwas nachgelassen. Als Kunde kann man sich in der Anwendung aber sehr wohl zurechtfinden.
+Die Funktionalität der Webseite war bei der Implementierung im Fokus gewesen, somit wurde der stilistische Aspekt mit CSS etwas nachgelassen. Als Nutzer kann man sich in der Anwendung aber sehr wohl zurechtfinden.
 
-Um die Anwendung zum Laufen zu bringen, sollte vor allem Flask installiert sein. Dann sollte zum Verzeichnis "DeliveryService" navigiert werden und dann per "flask run" starten.
+Um die Anwendung zum Laufen zu bringen, sollte vor allem Flask installiert sein. Dann muss man im Terminal zum Verzeichnis "DeliveryService" navigieren und dann per "flask run" die Anwendung starten.
 Es erscheint eine IP-Adresse, die man mit strg + mausklick öffnen kann. 
 
 Wie genau die Anwendung funktioniert lässt sich folgend beschreiben:
@@ -18,8 +18,8 @@ Bestellung. Hier werden nochmal alle Items inklusive Preisen gelistet.
 In dieser Übersicht können einzelne Items direkt gelöscht werden, 
 und es gibt eine Möglichkeit, einen optionalen Zusatztext für das Restaurant zu verfassen. 
 Sind die Kunden mit der Auswahl zufrieden, können sie nun die Bestellung abschicken. 
-Nach dem Abschicken der Bestellung können Kunden jederzeit den Status einer Bestellung 
-(s.u.) einsehen. Ferner können Kunden jederzeit auf ihre Bestellhistorie zugreifen und die 
+Nach dem Abschicken der Bestellung können Kunden jederzeit den Status einer Bestellung  
+einsehen. Ferner können Kunden jederzeit auf ihre Bestellhistorie zugreifen und die 
 Details früherer Bestellungen einsehen. 
 
 
@@ -33,9 +33,8 @@ jedes Item beliebig oft zubereitet werden. Ferner legt jedes Restaurant Öffnung
 Lieferradius fest. Der Lieferradius wird einfach als eine Liste an zulässigen Postleitzahlen angegeben.
 Sobald eine Bestellung für ein Restaurant eingeht, wird in der Webanwendung darauf 
 hingewiesen. Das Restaurant kann die Bestellung dann sichten und entweder ablehnen 
-oder bestätigen. Ferner kann ein Restaurant jederzeit die Bestellhistorie einsehen (alle 
-Bestellungen für dieses Restaurant). Die Historie enthält sowohl abgeschlossene, als auch 
-laufende (also nicht abgeschlossene oder stornierte) Bestellungen. 
+oder bestätigen. Ferner kann ein Restaurant jederzeit die Bestellhistorie einsehen. 
+Die Historie enthält sowohl abgeschlossene, als auch laufende (also nicht abgeschlossene oder stornierte) Bestellungen. 
 
 
 
