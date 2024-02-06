@@ -1,7 +1,9 @@
 In diesem Projekt geht es um die Implementation und Bereitstellung eines Online Lieferdienstes. Dafür wurde HTML/CSS für die Frontendseite verwendet und Flask für die serverseitige Logik. Als Datenbank für die Speicherung von User, Restaurants,
 Bestellungsdetails etc. wird MySQLite3 verwendet.
-
 Die Funktionalität der Webseite war bei der Implementierung im Fokus gewesen, somit wurde der stilistische Aspekt mit CSS etwas nachgelassen. Als Kunde kann man sich in der Anwendung aber sehr wohl zurechtfinden.
+
+Um die Anwendung zum Laufen zu bringen, sollte vor allem Flask installiert sein. Dann sollte zum Verzeichnis "DeliveryService" navigiert werden und dann per "flask run" starten.
+Es erscheint eine IP-Adresse, die man mit strg + mausklick öffnen kann. 
 
 Wie genau die Anwendung funktioniert lässt sich folgend beschreiben:
 
